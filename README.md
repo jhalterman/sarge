@@ -4,9 +4,7 @@ Simple object supervision (for when stuff goes wrong).
 
 ## Introduction
 
-Sarge is supervision for your objects. When failures occur, sarge whips your objects into for you by performing retries, state resets, and failure escalation. 
-
-Sarge allows you to build supervision trees that can handle failures separate from traditional try/catch logic, where failures can be escalated up the tree as necessary. The concept was adapted from [Erlang OTP's](http://www.erlang.org/doc/design_principles/des_princ.html) supervision trees.
+Sarge is supervision for your objects. When failures occur, sarge whips your objects into for you by performing retries, state resets, and failure escalation.
 
 ## Example
 
@@ -51,6 +49,10 @@ Hierarchical supervision involves chaining supervisors and supervised objects, w
     
 	// We can also link additional objects into the supervision hierarchy
 	sarge.link(uberParent, someParent);
+	
+## More
+
+Sarge allows you to build supervision trees that can handle escalating failures separate from traditional try/catch logic. The concept was adapted from [Erlang OTP's](http://www.erlang.org/doc/design_principles/des_princ.html) supervision trees.
 
 	
 ## Gratitude
