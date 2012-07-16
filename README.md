@@ -4,11 +4,13 @@ Simple object supervision (for when stuff goes wrong).
 
 ## Introduction
 
-Sarge is supervision for your objects. When failures occur, sarge whips your objects into for you by performing retries, state resets, and failure escalation.
+Sarge is supervision for your objects. When failures occur, sarge whips your objects into shape for you by performing retries, state resets, and failure escalation.
 
 ## Example
 
 **Simple supervision**
+
+	Sarge sarge = new Sarge();
 
     // Make a supervision plan
     Plan plan = Plans
@@ -17,7 +19,6 @@ Sarge is supervision for your objects. When failures occur, sarge whips your obj
       .make();
 
     // Create an instance of a class with failures handled according to the plan
-	Sarge sarge = new Sarge();    
     Something s = sarge.supervise(Something.class, plan);
      
     // Supervision is applied automatically when something goes wrong
@@ -39,9 +40,9 @@ Hierarchical supervision involves chaining supervisors and supervised objects, w
     }
      
     SomeParent parent = new SomeParent();
+    Sarge sarge = new Sarge();
      
     // Create an instance of a class supervised by the parent
-    Sarge sarge = new Sarge();
     SomeChild c = sarge.supervise(SomeChild.class, parent);
      
     // Supervision is applied automatically when something goes wrong
