@@ -12,16 +12,15 @@ Sarge allows you to build supervision trees that can handle failures separate fr
 
 **Simple supervision**
 
-	Sarge sarge = new Sarge();
-
     // Make a supervision plan
     Plan plan = Plans
       .retryOn(ConnectionFailedException.class, 5, Duration.mins(1))
       .rethrowOn(IllegalArgumentException.class, IllegalStateException.class)
       .make();
-     
-    // Create an instance of a class, with failures handled according to the given plan
-    Something s = Supervision.supervised(Something.class, plan);
+
+    // Create an instance of a class with failures handled according to the plan
+	Sarge sarge = new Sarge();    
+    Something s = sarge.supervise(Something.class, plan);
      
     // Supervision is applied automatically when something goes wrong
     s.doSomething();
@@ -41,13 +40,17 @@ Hierarchical supervision involves chaining supervisors and supervised objects, w
       }
     }
      
-    SomeParent p = new SomeParent();
+    SomeParent parent = new SomeParent();
      
-    // Create an instance of a class, supervised by the parent
-    SomeChild c = Supervision.supervised(SomeChild.class, someParent);
+    // Create an instance of a class supervised by the parent
+    Sarge sarge = new Sarge();
+    SomeChild c = sarge.supervise(SomeChild.class, parent);
      
     // Supervision is applied automatically when something goes wrong
-    s.doSomething();    
+    s.doSomething();
+    
+	// We can also link additional objects into the supervision hierarchy
+	sarge.link(uberParent, someParent);
 
 	
 ## Gratitude
