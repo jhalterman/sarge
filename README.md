@@ -49,7 +49,18 @@ Hierarchical supervision involves chaining supervisors and supervised objects, w
     s.doSomething();
     
 	// We can also link additional objects into the supervision hierarchy
-	sarge.link(uberParent, someParent);
+	sarge.link(uberParent, parent);
+	
+## How it works
+
+The key primitive in Sarge is a Plan, which takes a failure (Throwable) and directs sarge to do something with it such as retry, escalate, rethrow or resume. Plans can be constructed via the `Plans` class or directly such as:
+
+    Plan plan = new Plan() {
+      public Directive apply(Throwable cause) {
+        if (cause instanceof ConnectionClosedException)
+          return Directive.Rethrow;
+      }
+    };	
 	
 ## More
 
