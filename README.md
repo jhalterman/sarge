@@ -4,11 +4,11 @@ Simple object supervision (for when stuff goes wrong).
 
 ## Introduction
 
-Sarge supervises your objects, making fault handling easy. When failures occur, sarge whips your objects into shape by performing retries, state resets, and failure escalation.
+Sarge is supervision for your objects. When failures occur, sarge whips your objects into shape for you by performing retries, state resets, and failure escalation.
 
-## Examples
+## Example
 
-#### Simple supervision
+**Simple supervision**
 
 	Sarge sarge = new Sarge();
 
@@ -24,7 +24,7 @@ Sarge supervises your objects, making fault handling easy. When failures occur, 
     // Supervision is applied automatically when something goes wrong
     s.doSomething();
     
-#### Hierarchical supervision
+**Hierarchical supervision**
 
 Hierarchical supervision involves chaining supervisors and supervised objects, where failures can be escalated up the chain as necessary.
 
@@ -53,21 +53,23 @@ Hierarchical supervision involves chaining supervisors and supervised objects, w
 	
 ## How it works
 
-The key primitive in Sarge's supervision is a Plan, which takes a failure (Throwable) and directs sarge to do something with it such as retry, escalate, rethrow or resume. Plans can be constructed via the `Plans` class or directly such as:
+The key primitive in Sarge is a Plan, which takes a failure (Throwable) and directs sarge to do something with it such as retry, escalate, rethrow or resume. Plans can be constructed via the `Plans` class or directly such as:
 
     Plan plan = new Plan() {
       public Directive apply(Throwable cause) {
-        if (cause instanceof ConnectionFailedException)
-          return Directive.Retry(5, Duration.min(1));
         if (cause instanceof ConnectionClosedException)
           return Directive.Rethrow;
       }
-    };
+    };	
+	
+## More
+
+Sarge allows you to build supervision trees that can handle escalating failures separate from traditional try/catch logic. The concept was adapted from [Erlang OTP's](http://www.erlang.org/doc/design_principles/des_princ.html) supervision trees.
 
 	
-## Thanks
+## Gratitude
 
-Sarge was inpsired by [Erlang OTP's](http://www.erlang.org/doc/design_principles/des_princ.html) supervision trees and [Akka's supervision](http://akka.io) implementation. Thanks to the their contributors for the great work.
+Sarge was inpsired by [Akka's supervision](http://akka.io). Thanks to the Akka team for their great work.
 
 ## License
 
