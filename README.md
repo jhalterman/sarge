@@ -4,6 +4,10 @@
 
 Sarge creates *supervised* objects which *automatically* handle failures when they occur by performing retries, state resets, and failure escalation, allowing for easy and robust fault tolerance with little effort.
 
+## Setup
+
+[Download](https://github.com/jhalterman/sarge/downloads) the latest Sarge jar and add it to your classpath.
+
 ## Usage
 
 Sarge handles failures according to a `Plan` which takes an exception and directs Sarge to do something with it. Creating a `Plan` is straightforward:
@@ -23,7 +27,7 @@ With our `Plan` in hand, we can create a *supervised* object:
 	Sarge sarge = new Sarge();
     MailService service = sarge.supervise(MailService.class, plan);
 
-Supervision is automatically applied according to the plan when any exception occurs when invoking a method against the object:
+Supervision is automatically applied according to the plan when any exception occurs while invoking a method against the object:
     
     // Failures are handled according to the plan
     service.sendMail();
