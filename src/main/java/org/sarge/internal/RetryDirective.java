@@ -1,4 +1,4 @@
-package org.sarge.internal.supervision;
+package org.sarge.internal;
 
 import org.sarge.Directive;
 import org.sarge.util.Duration;

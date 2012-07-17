@@ -1,4 +1,4 @@
-package org.sarge.internal.supervision;
+package org.sarge.internal;
 
 /**
  * Tracks retry related statistics for a supervised instance.

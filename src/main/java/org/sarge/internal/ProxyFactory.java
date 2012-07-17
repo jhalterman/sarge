@@ -1,4 +1,4 @@
-package org.sarge.internal.supervision;
+package org.sarge.internal;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -11,7 +11,6 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.NoOp;
 
-import org.sarge.internal.ErrorsException;
 
 /**
  * Produces proxied instances of supervisable types.

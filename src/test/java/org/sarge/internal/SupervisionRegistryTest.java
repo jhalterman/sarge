@@ -1,6 +1,6 @@
-package org.sarge.internal.supervision;
+package org.sarge.internal;
 
-import org.sarge.internal.supervision.SupervisionRegistry;
+import org.sarge.internal.SupervisionRegistry;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

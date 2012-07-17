@@ -15,7 +15,6 @@
  */
 package org.sarge.internal;
 
-import org.sarge.internal.supervision.Errors;
 
 /**
  * @author Jonathan Halterman

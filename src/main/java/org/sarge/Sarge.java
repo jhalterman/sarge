@@ -1,7 +1,7 @@
 package org.sarge;
 
-import org.sarge.internal.supervision.ProxyFactory;
-import org.sarge.internal.supervision.SupervisionRegistry;
+import org.sarge.internal.ProxyFactory;
+import org.sarge.internal.SupervisionRegistry;
 import org.sarge.internal.util.Assert;
 
 /**

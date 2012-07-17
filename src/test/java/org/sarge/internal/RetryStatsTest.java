@@ -1,10 +1,10 @@
-package org.sarge.internal.supervision;
+package org.sarge.internal;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-import org.sarge.internal.supervision.RetryDirective;
-import org.sarge.internal.supervision.RetryStats;
+import org.sarge.internal.RetryDirective;
+import org.sarge.internal.RetryStats;
 import org.sarge.util.Duration;
 import org.testng.annotations.Test;
 

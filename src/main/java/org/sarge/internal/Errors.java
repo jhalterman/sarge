@@ -1,10 +1,8 @@
-package org.sarge.internal.supervision;
+package org.sarge.internal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sarge.internal.ErrorMessage;
-import org.sarge.internal.ErrorsException;
 
 public final class Errors {
   private List<ErrorMessage> errors;

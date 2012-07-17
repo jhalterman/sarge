@@ -1,6 +1,6 @@
 package org.sarge;
 
-import org.sarge.internal.supervision.RetryDirective;
+import org.sarge.internal.RetryDirective;
 import org.sarge.util.Duration;
 
 /**

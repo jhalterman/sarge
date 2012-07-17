@@ -1,4 +1,4 @@
-package org.sarge.internal.supervision;
+package org.sarge.internal;
 
 import java.util.Map;
 import java.util.WeakHashMap;
