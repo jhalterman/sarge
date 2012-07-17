@@ -34,11 +34,11 @@ Sarge can create a parent/child supervision hierarchy where the `Supervisor`'s p
 
     class Parent implements Supervisor {
       @Override
-      public void plan(){
-        Plans
-	      .retryOn(TimeoutException.class, 5, Duration.mins(1))
-          .escalateOn(ConnectionClosedException.class)                    
-          .make(); 
+      public Plan plan(){
+        return Plans
+          .retryOn(TimeoutException.class, 5, Duration.mins(1))
+          .escalateOn(ConnectionClosedException.class)
+          .make();
       }
     }
      
