@@ -6,7 +6,7 @@ Sarge creates *supervised* objects which *automatically* handle failures when th
 
 ## Usage
 
-Sarge handles failures according to a `Plan` which takes a failure and directs Sarge to do something with it. Creating a `Plan` is straightforward:
+Sarge handles failures according to a `Plan` which takes an exception and directs Sarge to do something with it. Creating a `Plan` is straightforward:
 
     Plan plan = Plans
       .retryOn(TimeoutException.class, 5, Duration.mins(1))
@@ -21,12 +21,12 @@ This Plan retries any method invocations that fail with a TimeoutException, esca
 With our `Plan` in hand, we can create a *supervised* object:
 
 	Sarge sarge = new Sarge();
-    MailService s = sarge.supervise(MailService.class, plan);
+    MailService service = sarge.supervise(MailService.class, plan);
 
 Supervision is automatically applied according to the plan when any exception occurs when invoking a method against the object:
     
     // Failures are handled according to the plan
-    s.sendMail();
+    service.sendMail();
     
 #### Hierarchical supervision
 
@@ -46,7 +46,7 @@ Sarge can create a parent/child supervision hierarchy where the `Supervisor`'s p
     Sarge sarge = new Sarge();
      
     // Create a Child that is supervised by the parent
-    Child c = sarge.supervise(Child.class, parent);
+    Child child = sarge.supervise(Child.class, parent);
     
 We can link additional objects into the supervision hierarchy, which will handle any failures that are escalated:
     
@@ -58,10 +58,10 @@ Aside from the `Plans` class, Plans can also be constructed directly by implemen
 
     Plan plan = new Plan() {
       public Directive apply(Throwable cause) {
-        if (cause instanceof ConnectionFailedException)
+        if (cause instanceof TimeoutException)
           return Directive.Retry(5, Duration.min(1));
         if (cause instanceof ConnectionClosedException)
-          return Directive.Rethrow;
+          return Directive.Escalate;
       }
     };
 
