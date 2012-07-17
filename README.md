@@ -1,4 +1,4 @@
-# Sarge 0.1.0
+# Sarge 0.2.0
 
 *Simple object supervision (for when stuff goes wrong)*
 
