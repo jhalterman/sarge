@@ -6,10 +6,9 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.sarge.Directive;
+import org.sarge.Lifecycle.PreRetry;
 import org.sarge.Plan;
 import org.sarge.Supervisor;
-import org.sarge.Lifecycle.PreRetry;
-import org.sarge.internal.util.Log;
 
 /**
  * Intercepts supervised object method invocations and applies a {@link Plan} for any failures.
@@ -17,7 +16,6 @@ import org.sarge.internal.util.Log;
  * @author Jonathan Halterman
  */
 class SupervisedInterceptor implements MethodInterceptor {
-  private static final Log LOG = Log.forClass(SupervisedInterceptor.class);
   private final SupervisionRegistry registry;
 
   SupervisedInterceptor(SupervisionRegistry registry) {
@@ -51,7 +49,6 @@ class SupervisedInterceptor implements MethodInterceptor {
         return result;
       } catch (Throwable t) {
         cause = t;
-        LOG.trace(t, "Error occurred in supervised object");
 
         // Supervision hierarchy traversal
         while (true) {
@@ -72,7 +69,6 @@ class SupervisedInterceptor implements MethodInterceptor {
               if (retryStats.canRetry()) {
                 if (retryDirective.shouldBackoff()) {
                   long waitTime = retryStats.getWaitTime();
-                  LOG.debug("Waiting {} milliseconds before retry of {}", waitTime, method);
                   Thread.sleep(waitTime);
                 }
                 break;

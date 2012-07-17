@@ -7,28 +7,18 @@
   <packaging>jar</packaging>
   <name>Sarge</name>
 
+  <properties>
+    <version.number>0.2.0</version.number>
+    <logback.version>1.0.6</logback.version>
+  </properties>
+
   <scm>
     <connection>scm:git:git@github.com:jhalterman/sarge.git</connection>
     <developerConnection>scm:git:git@github.com:jhalterman/sarge.git</developerConnection>
     <url>http://github.com/jhalterman/sarge/</url>
   </scm>
 
-  <properties>
-    <logback.version>1.0.6</logback.version>
-  </properties>
-
   <dependencies>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
-      <version>${logback.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
-    </dependency>
-
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -85,6 +75,27 @@
           </relocations>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <finalName>${artifactId}-${version.number}</finalName>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <author>false</author>
+          <protected>true</protected>
+          <excludePackageNames>*.internal</excludePackageNames>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
