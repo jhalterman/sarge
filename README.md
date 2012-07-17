@@ -1,59 +1,62 @@
 # Sarge 0.1.0
 
-Simple object supervision (for when stuff goes wrong).
+*Simple object supervision (for when stuff goes wrong)*
 
-## Introduction
+## The rundown
 
-Sarge supervises your objects, making fault handling easy. When failures occur, sarge whips your objects into shape by performing retries, state resets, and failure escalation.
+Sarge creates *supervised* objects which *automatically* handle failures when they occur by performing retries, state resets, and failure escalation, allowing for easy and robust fault tolerance with little effort.
 
-## Examples
+## Usage
 
-#### Simple supervision
+Sarge handles failures according to a `Plan` which takes a failure and directs Sarge to do something with it. Creating a `Plan` is straightforward:
 
-	Sarge sarge = new Sarge();
-
-    // Make a supervision plan
     Plan plan = Plans
-      .retryOn(ConnectionFailedException.class, 5, Duration.mins(1))
+      .retryOn(TimeoutException.class, 5, Duration.mins(1))
+      .escalateOn(ConnectionClosedException.class)
       .rethrowOn(IllegalArgumentException.class, IllegalStateException.class)
       .make();
+      
+This Plan retries any method invocations that fail with a TimeoutException, escalates any ConnectionClosedExceptions, and rethrows any IllegalArgumentExceptions and IllegalStateExceptions.      
 
-    // Create an instance of a class with failures handled according to the plan
-    Something s = sarge.supervise(Something.class, plan);
-     
-    // Supervision is applied automatically when something goes wrong
-    s.doSomething();
+##### Supervision
+
+With our `Plan` in hand, we can create a *supervised* object:
+
+	Sarge sarge = new Sarge();
+    MailService s = sarge.supervise(MailService.class, plan);
+
+Supervision is automatically applied according to the plan when any exception occurs when invoking a method against the object:
     
-#### Hierarchical supervision
+    // Failures are handled according to the plan
+    s.sendMail();
+    
+##### Hierarchical supervision
 
-Hierarchical supervision involves chaining supervisors and supervised objects, where failures can be escalated up the chain as necessary.
+Sarge can create a parent/child supervision hierarchy where the `Supervisor`'s plan is applied to any failures that occur in the child:
 
-    class SomeParent implements Supervisor {
+    class Parent implements Supervisor {
       @Override
       public void plan(){
         Plans
-          .retryOn(ConnectionFailedException.class, 5, Duration.mins(1))
-          .rethrowOn(IllegalArgumentException.class, IllegalStateException.class)
-          .escalateOn(TimeoutException.class)
+	      .retryOn(TimeoutException.class, 5, Duration.mins(1))
+          .escalateOn(ConnectionClosedException.class)                    
           .make(); 
       }
     }
      
-    SomeParent parent = new SomeParent();
+    Parent parent = new Parent();
     Sarge sarge = new Sarge();
      
-    // Create an instance of a class supervised by the parent
-    SomeChild c = sarge.supervise(SomeChild.class, parent);
-     
-    // Supervision is applied automatically when something goes wrong
-    s.doSomething();
+    // Create a Child that is supervised by the parent
+    Child c = sarge.supervise(Child.class, parent);
     
-	// We can also link additional objects into the supervision hierarchy
+We can link additional objects into the supervision hierarchy, which will handle any failures that are escalated:
+    
 	sarge.link(uberParent, parent);
 	
-## How it works
+##### More on plans
 
-The key primitive in Sarge's supervision is a Plan, which takes a failure (Throwable) and directs sarge to do something with it such as retry, escalate, rethrow or resume. Plans can be constructed via the `Plans` class or directly such as:
+Aside from the `Plans` class, Plans can also be constructed directly by implementing the `Plan` interface and returning the desired `Directive` for handling each failure:
 
     Plan plan = new Plan() {
       public Directive apply(Throwable cause) {
