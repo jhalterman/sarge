@@ -64,7 +64,18 @@ Aside from the `Plans` class, Plans can also be constructed directly by implemen
           return Directive.Escalate;
       }
     };
+    
+#### Lifecycle hooks
 
+Lifecycle hooks allow supervised objects to be notified prior to a supervision directive being carried out, allowing an object to reset its internal state if necessary:
+
+    class SupervisedService implements PreRetry {
+      @Override
+      public void preRetry(Throwable reason) {
+        if (reason instanceof ConnectionClosedException)
+          connect();
+      }
+    }
 	
 ## Thanks
 
