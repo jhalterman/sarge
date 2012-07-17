@@ -2,8 +2,6 @@
 
 *Simple object supervision (for when stuff goes wrong)*
 
-## The rundown
-
 Sarge creates *supervised* objects which *automatically* handle failures when they occur by performing retries, state resets, and failure escalation, allowing for easy and robust fault tolerance with little effort.
 
 ## Usage
@@ -18,7 +16,7 @@ Sarge handles failures according to a `Plan` which takes a failure and directs S
       
 This Plan retries any method invocations that fail with a TimeoutException, escalates any ConnectionClosedExceptions, and rethrows any IllegalArgumentExceptions and IllegalStateExceptions.      
 
-##### Supervision
+#### Supervision
 
 With our `Plan` in hand, we can create a *supervised* object:
 
@@ -30,7 +28,7 @@ Supervision is automatically applied according to the plan when any exception oc
     // Failures are handled according to the plan
     s.sendMail();
     
-##### Hierarchical supervision
+#### Hierarchical supervision
 
 Sarge can create a parent/child supervision hierarchy where the `Supervisor`'s plan is applied to any failures that occur in the child:
 
@@ -54,7 +52,7 @@ We can link additional objects into the supervision hierarchy, which will handle
     
 	sarge.link(uberParent, parent);
 	
-##### More on plans
+#### More on plans
 
 Aside from the `Plans` class, Plans can also be constructed directly by implementing the `Plan` interface and returning the desired `Directive` for handling each failure:
 
