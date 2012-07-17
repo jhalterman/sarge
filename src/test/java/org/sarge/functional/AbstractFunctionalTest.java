@@ -4,10 +4,10 @@ import org.sarge.Sarge;
 import org.testng.annotations.BeforeMethod;
 
 abstract class AbstractFunctionalTest {
-  protected Sarge supervision;
+  protected Sarge sarge;
 
   @BeforeMethod
   protected void beforeMethod() {
-    supervision = new Sarge();
+    sarge = new Sarge();
   }
 }

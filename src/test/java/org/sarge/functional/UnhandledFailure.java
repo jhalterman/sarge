@@ -23,7 +23,7 @@ public class UnhandledFailure extends AbstractFunctionalTest {
 
   @Test(expectedExceptions = IllegalStateException.class)
   public void shouldRethrowOnUnhandledFailure() {
-    Foo foo = supervision.supervise(Foo.class, UNHANDLED_PLAN);
+    Foo foo = sarge.supervise(Foo.class, UNHANDLED_PLAN);
     foo.doSomething();
   }
 }

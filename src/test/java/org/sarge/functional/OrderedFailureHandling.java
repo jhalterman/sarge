@@ -18,8 +18,8 @@ public class OrderedFailureHandling extends AbstractFunctionalTest {
     }
   }
 
-  public void shouldHandleFailuresInOrderDeclaredInSupervisionStrategy() {
-    Foo foo = supervision.supervise(Foo.class,
+  public void shouldHandleFailuresInOrderDeclaredInPlan() {
+    Foo foo = sarge.supervise(Foo.class,
         Plans.onFailure(IllegalStateException.class, Directive.Rethrow)
              .onFailure(Exception.class, Directive.Resume));
 

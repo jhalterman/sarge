@@ -23,7 +23,7 @@ public class BackoffTest extends AbstractFunctionalTest {
   }
 
   public void shouldBackoff() {
-    Foo foo = supervision.supervise(Foo.class, Plans.retryOn(IllegalStateException.class, 5,
+    Foo foo = sarge.supervise(Foo.class, Plans.retryOn(IllegalStateException.class, 5,
         Duration.inf(), Duration.millis(100), Duration.millis(800)));
 
     long startTime = System.currentTimeMillis();

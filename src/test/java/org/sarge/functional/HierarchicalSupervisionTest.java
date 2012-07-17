@@ -3,8 +3,6 @@ package org.sarge.functional;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
-import java.util.concurrent.TimeUnit;
-
 import org.sarge.Plan;
 import org.sarge.Plans;
 import org.sarge.Supervisor;
@@ -18,8 +16,7 @@ import org.testng.annotations.Test;
 @Test
 public class HierarchicalSupervisionTest extends AbstractFunctionalTest {
   private static int counter;
-  private static final Plan RETRY_PLAN = Plans.retryOn(Throwable.class, 3,
-      Duration.of(10, TimeUnit.MINUTES))
+  private static final Plan RETRY_PLAN = Plans.retryOn(Throwable.class, 3, Duration.mins(10))
                                               .make();
   private static final Plan ESCALATE_PLAN = Plans.escalateOn(Throwable.class)
                                                  .make();
@@ -61,14 +58,14 @@ public class HierarchicalSupervisionTest extends AbstractFunctionalTest {
     counter = 0;
   }
 
-  public void shouldEscalateFailureToRetryStrategy() {
+  public void shouldEscalateFailureToRetryPlan() {
     UberLevel u = new UberLevel();
     TopLevel t = new TopLevel();
     MidLevel m = new MidLevel();
-    Child c = supervision.supervisable(Child.class);
-    supervision.link(u, t);
-    supervision.link(t, m);
-    supervision.link(m, c);
+    Child c = sarge.supervisable(Child.class);
+    sarge.link(u, t);
+    sarge.link(t, m);
+    sarge.link(m, c);
 
     try {
       c.doSomething();
@@ -79,8 +76,8 @@ public class HierarchicalSupervisionTest extends AbstractFunctionalTest {
 
   public void shouldThrowAfterRetriesExceeded() {
     TopLevel t = new TopLevel();
-    Child c = supervision.supervisable(Child.class);
-    supervision.link(t, c);
+    Child c = sarge.supervisable(Child.class);
+    sarge.link(t, c);
 
     try {
       c.doSomething();
@@ -91,12 +88,12 @@ public class HierarchicalSupervisionTest extends AbstractFunctionalTest {
   }
 
   @Test(expectedExceptions = RuntimeException.class)
-  public void shouldEscalateFailuresToEscalateStrategy() {
+  public void shouldEscalateFailuresToEscalatePlan() {
     TopLevelEscalate t = new TopLevelEscalate();
     MidLevel m = new MidLevel();
-    Child c = supervision.supervisable(Child.class);
-    supervision.link(t, m);
-    supervision.link(m, c);
+    Child c = sarge.supervisable(Child.class);
+    sarge.link(t, m);
+    sarge.link(m, c);
     c.doSomething();
   }
 }

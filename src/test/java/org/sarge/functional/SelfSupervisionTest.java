@@ -3,7 +3,6 @@ package org.sarge.functional;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.sarge.Directive;
@@ -21,7 +20,7 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
   private static int counter;
   private static final Plan RETRY_PLAN = new Plan() {
     public Directive apply(Throwable cause) {
-      return Directive.Retry(3, Duration.of(10, TimeUnit.MINUTES));
+      return Directive.Retry(3, Duration.mins(10));
     }
   };
   private static final Plan ESCALATE_PLAN = new Plan() {
@@ -78,7 +77,7 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
     public Plan plan() {
       return new Plan() {
         public Directive apply(Throwable cause) {
-          return Directive.Retry(2, Duration.of(100, TimeUnit.MILLISECONDS));
+          return Directive.Retry(2, Duration.millis(100));
         }
       };
     }
@@ -103,7 +102,7 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
   }
 
   public void shouldRetry() {
-    Foo foo = supervision.supervise(Foo.class, RETRY_PLAN);
+    Foo foo = sarge.supervise(Foo.class, RETRY_PLAN);
 
     try {
       foo.doSomething();
@@ -113,7 +112,7 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
   }
 
   public void shouldEscalate() {
-    FooEscalate foo = supervision.supervise(FooEscalate.class);
+    FooEscalate foo = sarge.supervise(FooEscalate.class);
 
     try {
       foo.doSomethingEscalated();
@@ -123,7 +122,7 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
   }
 
   public void shouldRetryWithArguments() {
-    Foo foo = supervision.supervise(Foo.class, RETRY_PLAN);
+    Foo foo = sarge.supervise(Foo.class, RETRY_PLAN);
     AtomicInteger i = new AtomicInteger(0);
 
     try {
@@ -134,7 +133,7 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
   }
 
   public void shouldTrackFailuresForSameObjectAcrossSeparateInvocations() {
-    Foo foo = supervision.supervise(Foo.class, RETRY_PLAN);
+    Foo foo = sarge.supervise(Foo.class, RETRY_PLAN);
     foo.throwIt(new BinaryException());
     foo.throwIt(new BinaryException());
     foo.throwIt(new BinaryException());
@@ -147,8 +146,8 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
   }
 
   public void shouldTrackFailuresForSeparateObjects() {
-    Foo foo1 = supervision.supervise(Foo.class, RETRY_PLAN);
-    Foo foo2 = supervision.supervise(Foo.class, RETRY_PLAN);
+    Foo foo1 = sarge.supervise(Foo.class, RETRY_PLAN);
+    Foo foo2 = sarge.supervise(Foo.class, RETRY_PLAN);
 
     foo1.throwIt(new BinaryException());
     foo1.throwIt(new BinaryException());
@@ -172,7 +171,7 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
   }
 
   public void shouldAllowRetryWhenWindowExceeded() throws Exception {
-    FooShortRetry foo = supervision.supervise(FooShortRetry.class);
+    FooShortRetry foo = sarge.supervise(FooShortRetry.class);
     foo.throwIt(new BinaryException());
     foo.throwIt(new BinaryException());
     try {
@@ -189,12 +188,12 @@ public class SelfSupervisionTest extends AbstractFunctionalTest {
 
   @Test(expectedExceptions = IllegalStateException.class)
   public void shouldRethrowOnFailure() {
-    Foo foo = supervision.supervise(Foo.class, RETHROW_PLAN);
+    Foo foo = sarge.supervise(Foo.class, RETHROW_PLAN);
     foo.doSomething();
   }
 
   public void shouldResumeOnFailure() {
-    Foo foo = supervision.supervise(Foo.class, RESUME_PLAN);
+    Foo foo = sarge.supervise(Foo.class, RESUME_PLAN);
     foo.doSomething();
   }
 }

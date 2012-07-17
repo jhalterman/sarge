@@ -39,14 +39,14 @@ public class SupervisorOverride extends AbstractFunctionalTest {
   }
 
   public void shouldOverrideSelfSupervisionWithParentSupervision() {
-    Child child = supervision.supervise(Child.class);
-    supervision.link(new Parent(), child);
+    Child child = sarge.supervise(Child.class);
+    sarge.link(new Parent(), child);
     child.doSomething();
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldNotAllowSelfSupervisionOverride() {
-    Child child = supervision.supervise(Child.class, new Parent());
-    supervision.link(new Parent(), child);
+    Child child = sarge.supervise(Child.class, new Parent());
+    sarge.link(new Parent(), child);
   }
 }
