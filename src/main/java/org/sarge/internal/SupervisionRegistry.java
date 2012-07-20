@@ -12,38 +12,38 @@ import org.sarge.Supervisor;
  * @author Jonathan Halterman
  */
 public class SupervisionRegistry {
-  private final Map<Object, Supervisor> SUPERVISORS = new ConcurrentHashMap<Object, Supervisor>();
-  private final Map<Object, Plan> SELF_SUPERVISION = new ConcurrentHashMap<Object, Plan>();
+  private final Map<Object, Supervisor> supervisors = new ConcurrentHashMap<Object, Supervisor>();
+  private final Map<Object, Plan> plans = new ConcurrentHashMap<Object, Plan>();
 
-  /** Returns the SupervisionStrategy for the {@code selfSupervised}. */
-  public Plan selfSupervisionFor(Object selfSupervised) {
-    return SELF_SUPERVISION.get(selfSupervised);
+  /** Returns the Plan for the {@code supervised}. */
+  public Plan planFor(Object supervised) {
+    return plans.get(supervised);
   }
 
   public void supervise(Object supervised, Plan strategy) {
-    SELF_SUPERVISION.put(supervised, strategy);
+    plans.put(supervised, strategy);
   }
 
   /**
    * @throws IllegalArgumentException if {@code supervised} is already supervised
    */
   public void supervise(Object supervised, Supervisor supervisor) {
-    Supervisor existingSupervisor = SUPERVISORS.get(supervised);
+    Supervisor existingSupervisor = supervisors.get(supervised);
     if (existingSupervisor != null)
       throw new IllegalArgumentException(supervised + " is already supervised");
-    SUPERVISORS.put(supervised, supervisor);
+    supervisors.put(supervised, supervisor);
   }
 
   /** Returns the supervisor for the {@code supervised}. */
   public Supervisor supervisorFor(Object supervised) {
-    return SUPERVISORS.get(supervised);
+    return supervisors.get(supervised);
   }
 
   /**
    * @throws IllegalArgumentException if {@code supervised} is not supervised
    */
   public void unsupervise(Object supervised) {
-    if (SELF_SUPERVISION.remove(supervised) == null && SUPERVISORS.remove(supervised) == null)
+    if (plans.remove(supervised) == null && supervisors.remove(supervised) == null)
       throw new IllegalArgumentException(supervised + " is not supervised");
   }
 }

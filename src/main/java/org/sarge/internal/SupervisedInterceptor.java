@@ -32,7 +32,7 @@ class SupervisedInterceptor implements MethodInterceptor {
 
     Object supervised = proxy;
     Supervisor supervisor = registry.supervisorFor(supervised);
-    Plan plan = supervisor == null ? registry.selfSupervisionFor(supervised) : supervisor.plan();
+    Plan plan = supervisor == null ? registry.planFor(supervised) : supervisor.plan();
     Throwable cause = null;
     RetryStats retryStats = null;
 
