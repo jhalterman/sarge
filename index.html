@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Sarge : Simple object supervision" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Sarge</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/jhalterman/sarge">View on GitHub</a>
+
+          <h1 id="project_title">Sarge</h1>
+          <h2 id="project_tagline">Simple object supervision</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/jhalterman/sarge/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/jhalterman/sarge/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Sarge 0.2.0</h1>
+
+<p><em>Simple object supervision (for when stuff goes wrong)</em></p>
+
+<p>Sarge creates <em>supervised</em> objects which <em>automatically</em> handle failures when they occur by performing retries, state resets, and failure escalation, allowing for easy and robust fault tolerance with little effort.</p>
+
+<h2>Setup</h2>
+
+<p><a href="https://github.com/jhalterman/sarge/downloads">Download</a> the latest Sarge jar and add it to your classpath.</p>
+
+<h2>Usage</h2>
+
+<p>Sarge handles failures according to a <code>Plan</code> which takes an exception and directs Sarge to do something with it. Creating a <code>Plan</code> is straightforward:</p>
+
+<pre><code>Plan plan = Plans
+  .retryOn(TimeoutException.class, 5, Duration.mins(1))
+  .escalateOn(ConnectionClosedException.class)
+  .rethrowOn(IllegalArgumentException.class, IllegalStateException.class)
+  .make();
+</code></pre>
+
+<p>This Plan retries any method invocations that fail with a TimeoutException, escalates any ConnectionClosedExceptions, and rethrows any IllegalArgumentExceptions and IllegalStateExceptions.      </p>
+
+<h4>Supervision</h4>
+
+<p>With our <code>Plan</code> in hand, we can create a <em>supervised</em> object:</p>
+
+<pre><code>Sarge sarge = new Sarge();
+MailService service = sarge.supervise(MailService.class, plan);
+</code></pre>
+
+<p>Supervision is automatically applied according to the plan when any exception occurs while invoking a method against the object:</p>
+
+<pre><code>// Failures are handled according to the plan
+service.sendMail();
+</code></pre>
+
+<h4>Hierarchical supervision</h4>
+
+<p>Sarge can create a parent/child supervision hierarchy where the <code>Supervisor</code>'s plan is applied to any failures that occur in the child:</p>
+
+<pre><code>class Parent implements Supervisor {
+  @Override
+  public Plan plan(){
+    return Plans
+      .retryOn(TimeoutException.class, 5, Duration.mins(1))
+      .escalateOn(ConnectionClosedException.class)
+      .make();
+  }
+}
+
+Parent parent = new Parent();
+Sarge sarge = new Sarge();
+
+// Create a Child that is supervised by the parent
+Child child = sarge.supervise(Child.class, parent);
+</code></pre>
+
+<p>We can link additional objects into the supervision hierarchy, which will handle any failures that are escalated:</p>
+
+<pre><code>sarge.link(uberParent, parent);
+</code></pre>
+
+<h4>More on plans</h4>
+
+<p>Aside from the <code>Plans</code> class, Plans can also be constructed directly by implementing the <code>Plan</code> interface and returning the desired <code>Directive</code> for handling each failure:</p>
+
+<pre><code>Plan plan = new Plan() {
+  public Directive apply(Throwable cause) {
+    if (cause instanceof TimeoutException)
+      return Directive.Retry(5, Duration.min(1));
+    if (cause instanceof ConnectionClosedException)
+      return Directive.Escalate;
+  }
+};
+</code></pre>
+
+<h4>Lifecycle hooks</h4>
+
+<p>Lifecycle hooks allow supervised objects to be notified prior to a supervision directive being carried out, allowing an object to reset its internal state if necessary:</p>
+
+<pre><code>class SupervisedService implements PreRetry {
+  @Override
+  public void preRetry(Throwable reason) {
+    if (reason instanceof ConnectionClosedException)
+      connect();
+  }
+}
+</code></pre>
+
+<h2>Thanks</h2>
+
+<p>Sarge was inpsired by <a href="http://www.erlang.org/doc/design_principles/des_princ.html">Erlang OTP's</a> supervision trees and <a href="http://akka.io">Akka's supervision</a> implementation. Thanks to the their contributors for the great work.</p>
+
+<h2>License</h2>
+
+<p>Copyright 2012 Jonathan Halterman - Released under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 license</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Sarge maintained by <a href="https://github.com/jhalterman">jhalterman</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
