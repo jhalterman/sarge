@@ -63,7 +63,7 @@ Child child = sarge.supervise(Child.class, parent);
 We can link additional objects into the supervision hierarchy, which will handle any failures that are escalated:
 
 ```java
-	sarge.link(uberParent, parent);
+sarge.link(uberParent, parent);
 ```
 	
 #### More on plans
