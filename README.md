@@ -6,7 +6,15 @@ Sarge creates *supervised* objects which *automatically* handle failures when th
 
 ## Setup
 
-[Download](https://github.com/jhalterman/sarge/downloads) the latest Sarge jar and add it to your classpath.
+Add Sarge as a Maven dependency:
+
+```xml
+<dependency>
+  <groupId>org.sarge</groupId>
+  <artifactId>sarge</artifactId>
+  <version>0.2.0</version>
+</dependency>
+```
 
 ## Usage
 
