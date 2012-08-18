@@ -10,7 +10,7 @@ Add Sarge as a Maven dependency:
 
 ```xml
 <dependency>
-  <groupId>org.sarge</groupId>
+  <groupId>org.jodah</groupId>
   <artifactId>sarge</artifactId>
   <version>0.2.0</version>
 </dependency>

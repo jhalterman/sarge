@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -7,12 +8,16 @@
     <version>7</version>
   </parent>
 
-  <groupId>org.sarge</groupId>
+  <groupId>org.jodah</groupId>
   <artifactId>sarge</artifactId>
   <version>0.2.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Sarge</name>
-  <inceptionYear>2012</inceptionYear>
+  <url>http://github.com/jhalterman/sarge/</url>
+
+  <properties>
+    <version.number>0.2.0</version.number>
+  </properties>
 
   <licenses>
     <license>
@@ -25,12 +30,9 @@
   <developers>
     <developer>
       <name>Jonathan Halterman</name>
+      <url>http://jodah.org</url>
     </developer>
   </developers>
-
-  <properties>
-    <version.number>0.2.0</version.number>
-  </properties>
 
   <scm>
     <connection>scm:git:git@github.com:jhalterman/sarge.git</connection>
@@ -86,11 +88,11 @@
           <relocations>
             <relocation>
               <pattern>net.sf.cglib</pattern>
-              <shadedPattern>org.sarge.internal.cglib</shadedPattern>
+              <shadedPattern>org.jodah.sarge.internal.cglib</shadedPattern>
             </relocation>
             <relocation>
               <pattern>org.objectweb.asm</pattern>
-              <shadedPattern>org.sarge.internal.asm</shadedPattern>
+              <shadedPattern>org.jodah.sarge.internal.asm</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
