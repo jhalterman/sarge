@@ -1,4 +1,4 @@
-# Sarge 0.2.0
+# Sarge 0.2.1
 
 *Simple object supervision (for when stuff goes wrong)*
 
@@ -12,7 +12,7 @@ Add Sarge as a Maven dependency:
 <dependency>
   <groupId>org.jodah</groupId>
   <artifactId>sarge</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
 </dependency>
 ```
 
@@ -109,4 +109,4 @@ Sarge was inpsired by [Erlang OTP's](http://www.erlang.org/doc/design_principles
 
 ## License
 
-Copyright 2012 Jonathan Halterman - Released under the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0.html).
+Copyright 2012-2013 Jonathan Halterman - Released under the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0.html).
