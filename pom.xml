@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -7,7 +8,7 @@
     <version>7</version>
   </parent>
 
-  <groupId>org.jodah</groupId>
+  <groupId>net.jodah</groupId>
   <artifactId>sarge</artifactId>
   <version>0.2.2-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -29,7 +30,7 @@
   <developers>
     <developer>
       <name>Jonathan Halterman</name>
-      <url>http://jodah.org</url>
+      <url>http://jodah.net</url>
     </developer>
   </developers>
 
@@ -41,15 +42,15 @@
 
   <dependencies>
     <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib</artifactId>
+      <version>2.2.2</version>
+    </dependency>
+    <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <version>6.5.2</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>cglib</groupId>
-      <artifactId>cglib</artifactId>
-      <version>2.2.2</version>
     </dependency>
   </dependencies>
 
@@ -88,11 +89,11 @@
           <relocations>
             <relocation>
               <pattern>net.sf.cglib</pattern>
-              <shadedPattern>org.jodah.sarge.internal.cglib</shadedPattern>
+              <shadedPattern>net.jodah.sarge.internal.cglib</shadedPattern>
             </relocation>
             <relocation>
               <pattern>org.objectweb.asm</pattern>
-              <shadedPattern>org.jodah.sarge.internal.asm</shadedPattern>
+              <shadedPattern>net.jodah.sarge.internal.asm</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
