@@ -108,11 +108,9 @@ class SupervisedService implements PreRetry {
 
 By default, supervised objects must be instantiated by Sarge since they require instrumentation. As an alternative, we can delegate instantiation of supervised objects to other libraries such as [Spring](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/SpringIntegrationTest.java) or [Guice](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/GuiceIntegrationTest.java) by hooking into Sarge's MethodInterceptor. Have a look at the [tests](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration) for examples on how to integrate 3rd party libraries.
 
-## FAQ
+## Limitations
 
-* **How does Sarge work?** - Sarge creates _supervisable_ objects by instrumenting them via Cglib.
-* **What are the limitations?** - Sarge cannot supervise classes that are _final_, _protected_ or _private_, or methods that are _final_ or _private_.
-* **Do supervisors need to be instantiated by Sarge?** No, only objects you plan to supervise need to be supervisable and/or created by Sarge. 
+Since Sarge relies on runtime bytecode generation to create supervised objects by subclassing them, it cannot supervise classes that are _final_, _protected_ or _private_, or methods that are _final_ or _private_.
 
 ## Thanks
 
