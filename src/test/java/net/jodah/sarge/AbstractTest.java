@@ -1,10 +1,10 @@
-package net.jodah.sarge.functional;
+package net.jodah.sarge;
 
 import net.jodah.sarge.Sarge;
 
 import org.testng.annotations.BeforeMethod;
 
-abstract class AbstractFunctionalTest {
+public abstract class AbstractTest {
   protected Sarge sarge;
 
   @BeforeMethod

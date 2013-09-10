@@ -102,6 +102,11 @@ class SupervisedService implements PreRetry {
   }
 }
 ```
+
+### 3rd Party Integration
+
+By default, supervised objects must be instantiated by Sarge since they require instrumentation. As an alternative, we can delegate instantiation of supervised objects to other libraries such as [Spring](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/SpringIntegrationTest.java) or [Guice](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/GuiceIntegrationTest.java). Have a look at the [tests](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration) for examples on how to integrate 3rd party libraries.
+
 	
 ## Thanks
 

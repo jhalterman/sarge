@@ -2,6 +2,7 @@ package net.jodah.sarge.functional;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
+import net.jodah.sarge.AbstractTest;
 import net.jodah.sarge.Plan;
 import net.jodah.sarge.Plans;
 import net.jodah.sarge.Supervisor;
@@ -14,7 +15,7 @@ import org.testng.annotations.Test;
  * @author Jonathan Halterman
  */
 @Test
-public class HierarchicalSupervisionTest extends AbstractFunctionalTest {
+public class HierarchicalSupervisionTest extends AbstractTest {
   private static int counter;
   private static final Plan RETRY_PLAN = Plans.retryOn(Throwable.class, 3, Duration.mins(10))
                                               .make();

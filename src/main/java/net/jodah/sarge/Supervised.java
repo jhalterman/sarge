@@ -1,11 +1,20 @@
 package net.jodah.sarge;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 /**
- * Defines a supervised type.
+ * Annotates a class that is capable of being supervised. Only required for child classes that do
+ * not themselves implement {@link Supervisor} or {@link SelfSupervisor}.
  * 
  * @author Jonathan Halterman
  */
-public interface Supervised {
-  /** Returns the plan to be used when supervising instances of this class. */
-  Plan plan();
+@Target(TYPE)
+@Retention(RUNTIME)
+@Documented
+public @interface Supervised {
 }

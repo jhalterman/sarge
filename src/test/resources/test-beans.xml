@@ -1,0 +1,18 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <bean id="foo" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="proxyTargetClass" value="true" />
+    <property name="target">
+      <bean class="net.jodah.sarge.integration.SpringIntegrationTest$Foo" />
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <value>sargeInterceptor</value>
+      </list>
+    </property>
+  </bean>
+
+</beans>

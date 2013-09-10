@@ -11,7 +11,6 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.NoOp;
 
-
 /**
  * Produces proxied instances of supervisable types.
  * 
@@ -30,8 +29,8 @@ public class ProxyFactory {
   private static final CallbackFilter METHOD_FILTER = new CallbackFilter() {
     public int accept(Method method) {
       return method.isBridge()
-          || (method.getName()
-                    .equals("finalize") && method.getParameterTypes().length == 0) ? 1 : 0;
+          || (method.getName().equals("finalize") && method.getParameterTypes().length == 0) ? 1
+          : 0;
     }
   };
 
@@ -55,8 +54,7 @@ public class ProxyFactory {
     try {
       return enhancer.createClass();
     } catch (Throwable t) {
-      throw new Errors().errorEnhancingClass(type, t)
-                        .toException();
+      throw new Errors().errorEnhancingClass(type, t).toException();
     }
   }
 
@@ -70,13 +68,12 @@ public class ProxyFactory {
     Class<?> enhanced = proxyClassFor(type);
 
     try {
-      Enhancer.registerCallbacks(enhanced, new Callback[] { new SupervisedInterceptor(registry),
-          NoOp.INSTANCE });
+      Enhancer.registerCallbacks(enhanced, new Callback[] {
+          new CglibMethodInterceptor(new SupervisedInterceptor(registry)), NoOp.INSTANCE });
       T result = type.cast(enhanced.newInstance());
       return result;
     } catch (Throwable t) {
-      throw new Errors().errorInstantiatingProxy(type, t)
-                        .toException();
+      throw new Errors().errorInstantiatingProxy(type, t).toException();
     } finally {
       Enhancer.registerCallbacks(enhanced, null);
     }

@@ -1,7 +1,7 @@
 package net.jodah.sarge;
 
 /**
- * Defines a type capable of supervising child objects.
+ * A type capable of supervising child objects.
  * 
  * @author Jonathan Halterman
  */

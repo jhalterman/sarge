@@ -12,8 +12,8 @@ import org.testng.annotations.Test;
  * @author Jonathan Halterman
  */
 @Test
-public class SupervsionTest {
-  private Sarge supervision;
+public class SargeTest {
+  private Sarge sarge;
 
   private static final Plan RESUME_PLAN = new Plan() {
     public Directive apply(Throwable cause) {
@@ -33,11 +33,11 @@ public class SupervsionTest {
 
   @BeforeMethod
   protected void beforeMethod() {
-    supervision = new Sarge();
+    sarge = new Sarge();
   }
 
   public void shouldThrowOnSupervisedWithStrategyWithoutAnnotation() {
-    Foo foo = supervision.supervise(Foo.class, RESUME_PLAN);
+    Foo foo = sarge.supervised(Foo.class, RESUME_PLAN);
     foo.doSomething();
 
     try {

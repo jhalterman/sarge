@@ -1,13 +1,14 @@
 package net.jodah.sarge.functional;
 
 import static org.testng.Assert.fail;
+import net.jodah.sarge.AbstractTest;
 import net.jodah.sarge.Directive;
 import net.jodah.sarge.Plans;
 
 import org.testng.annotations.Test;
 
 @Test
-public class OrderedFailureHandling extends AbstractFunctionalTest {
+public class OrderedFailureHandling extends AbstractTest {
   static class Foo {
     void doSomething() {
       throw new IllegalStateException();
@@ -19,7 +20,7 @@ public class OrderedFailureHandling extends AbstractFunctionalTest {
   }
 
   public void shouldHandleFailuresInOrderDeclaredInPlan() {
-    Foo foo = sarge.supervise(Foo.class,
+    Foo foo = sarge.supervised(Foo.class,
         Plans.onFailure(IllegalStateException.class, Directive.Rethrow)
              .onFailure(Exception.class, Directive.Resume));
 

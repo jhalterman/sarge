@@ -1,8 +1,13 @@
 package net.jodah.sarge;
 
 import net.jodah.sarge.internal.ProxyFactory;
+import net.jodah.sarge.internal.SupervisedInterceptor;
 import net.jodah.sarge.internal.SupervisionRegistry;
 import net.jodah.sarge.internal.util.Assert;
+
+import org.aopalliance.intercept.MethodInterceptor;
+
+import com.google.inject.ProvisionException;
 
 /**
  * Maintains supervision information and provides supervised objects.
@@ -12,6 +17,38 @@ import net.jodah.sarge.internal.util.Assert;
 public class Sarge {
   private final SupervisionRegistry registry = new SupervisionRegistry();
   private final ProxyFactory proxyFactory = new ProxyFactory(registry);
+
+  /**
+   * Returns a method interceptor that can be used to integrate Sarge with 3rd party libraries.
+   */
+  public MethodInterceptor interceptor() {
+    return new SupervisedInterceptor(registry);
+  }
+
+  /**
+   * Links the {@code supervised} object to the {@code plan}, forming a supervision tree.
+   * 
+   * @throws NullPointerException if {@code supervised} or {@code plan} are null
+   * @throws IllegalArgumentException if {@code supervised} is already supervised
+   */
+  public void link(Object supervised, Plan plan) {
+    Assert.notNull(supervised, "supervised");
+    Assert.notNull(plan, "plan");
+    registry.supervise(supervised, plan);
+  }
+
+  /**
+   * Links the {@code supervised} object to the {@code planMaker}'s plan, forming a supervision
+   * tree.
+   * 
+   * @throws NullPointerException if {@code supervised} or {@code planMaker} are null
+   * @throws IllegalArgumentException if {@code supervised} is already supervised
+   */
+  public void link(Object supervised, PlanMaker planMaker) {
+    Assert.notNull(supervised, "supervised");
+    Assert.notNull(planMaker, "planMaker");
+    registry.supervise(supervised, planMaker.make());
+  }
 
   /**
    * Links the {@code supervisor} to the {@code supervised} object, forming a supervision tree.
@@ -26,68 +63,79 @@ public class Sarge {
   }
 
   /**
-   * Returns an instance of {@code supervisableType} capable of being supervised.
+   * Returns an instance of the {@code type} that is capable of being supervised by calling one of
+   * the link() methods.
    * 
-   * @throws NullPointerException if {@code supervisableType} is null
+   * @throws NullPointerException if {@code type} is null
    */
-  public <T> T supervisable(Class<T> supervisableType) {
-    Assert.notNull(supervisableType, "supervisableType");
-    return proxyFactory.proxyFor(supervisableType);
+  public <T> T supervisable(Class<T> type) {
+    Assert.notNull(type, "type");
+    return proxyFactory.proxyFor(type);
   }
 
   /**
-   * Returns a supervised instance of the type, with supervision dictated by the {@code supervisor}
-   * 's supervision strategy.
+   * Supervises the {@code supervisable} object by {@link #link(Object, Plan) linking} it to its
+   * {@link SelfSupervisor#selfPlan() plan}.
    * 
-   * @throws NullPointerException if {@code supervised} or {@code supervisor} are null
+   * @throws NullPointerException if {@code selfSupervised} is null
+   */
+  public <T extends SelfSupervisor> void supervise(T supervisable) {
+    link(supervisable, supervisable.selfPlan());
+  }
+
+  /**
+   * Returns a supervised instance of the {@code type}, with supervision being dictated by the
+   * {@code supervisor} 's plan.
+   * 
+   * @throws NullPointerException if {@code type} or {@code supervisor} are null
    * @throws ProvisionException if there was a runtime failure while providing an instance
    */
-  public <C, S extends Supervisor> C supervise(Class<C> supervisedType, S supervisor) {
-    Assert.notNull(supervisedType, "supervisedType");
+  public <C, S extends Supervisor> C supervised(Class<C> type, S supervisor) {
+    Assert.notNull(type, "type");
     Assert.notNull(supervisor, "supervisor");
-    C supervised = proxyFactory.proxyFor(supervisedType);
+    C supervised = proxyFactory.proxyFor(type);
     link(supervisor, supervised);
     return supervised;
   }
 
   /**
-   * Returns a supervised instance of the type, with supervision dictated by the Supervised type's
-   * {@code supervisionStrategy}.
+   * Returns a supervised instance of the {@code supervisableType}, with supervision being dictated
+   * by the {@code supervisableType}'s plan.
    * 
-   * @throws NullPointerException if {@code supervisedType} is null
+   * @throws NullPointerException if {@code type} is null
    * @throws ProvisionException if there was a runtime failure while providing an instance
    */
-  public <T extends Supervised> T supervise(Class<T> supervisedType) {
-    Assert.notNull(supervisedType, "supervisedType");
-    T supervised = proxyFactory.proxyFor(supervisedType);
-    link(supervised, supervised.plan());
+  public <T extends SelfSupervisor> T supervised(Class<T> supervisableType) {
+    Assert.notNull(supervisableType, "supervisableType");
+    T supervised = proxyFactory.proxyFor(supervisableType);
+    link(supervised, supervised.selfPlan());
     return supervised;
   }
 
   /**
-   * Returns a supervised instance of the type, with supervision dictated by the {@code plan}.
+   * Returns a supervised instance of the type, with supervision being dictated by the {@code plan}.
    * 
    * @throws NullPointerException if {@code supervisedType} or {@code plan} are null
    * @throws ProvisionException if there was a runtime failure while providing an instance
    */
-  public <T> T supervise(Class<T> supervisedType, Plan plan) {
-    Assert.notNull(supervisedType, "supervisedType");
+  public <T> T supervised(Class<T> type, Plan plan) {
+    Assert.notNull(type, "type");
     Assert.notNull(plan, "plan");
-    T supervised = proxyFactory.proxyFor(supervisedType);
+    T supervised = proxyFactory.proxyFor(type);
     link(supervised, plan);
     return supervised;
   }
 
   /**
-   * Returns a supervised instance of the type, with supervision dictated by the {@code planMaker}'s
-   * plan.
+   * Returns a supervised instance of the type, with supervision being dictated by the
+   * {@code planMaker}'s plan.
    * 
    * @throws NullPointerException if {@code supervisedType} or {@code planMaker} are null
    * @throws ProvisionException if there was a runtime failure while providing an instance
    */
-  public <T> T supervise(Class<T> supervisedType, PlanMaker planMaker) {
+  public <T> T supervised(Class<T> supervisedType, PlanMaker planMaker) {
     Assert.notNull(planMaker, "planMaker");
-    return supervise(supervisedType, planMaker.make());
+    return supervised(supervisedType, planMaker.make());
   }
 
   /**
@@ -99,14 +147,5 @@ public class Sarge {
   public void unlink(Object supervised) {
     Assert.notNull(supervised, "supervised");
     registry.unsupervise(supervised);
-  }
-
-  /**
-   * Links the {@code plan} to the {@code supervised} object, forming a supervision tree.
-   * 
-   * @throws IllegalArgumentException if {@code supervised} is already supervised
-   */
-  private void link(Object supervised, Plan plan) {
-    registry.supervise(supervised, plan);
   }
 }
