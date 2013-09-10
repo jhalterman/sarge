@@ -9,12 +9,12 @@ import java.lang.annotation.Target;
 
 /**
  * Annotates a class that is capable of being supervised. Only required for child classes that do
- * not themselves implement {@link Supervisor} or {@link SelfSupervisor}.
+ * not implement {@link SelfSupervisor}.
  * 
  * @author Jonathan Halterman
  */
 @Target(TYPE)
 @Retention(RUNTIME)
 @Documented
-public @interface Supervised {
+public @interface Supervisable {
 }

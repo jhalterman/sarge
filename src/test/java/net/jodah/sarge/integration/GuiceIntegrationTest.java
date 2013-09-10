@@ -5,6 +5,7 @@ import net.jodah.sarge.Plan;
 import net.jodah.sarge.Plans;
 import net.jodah.sarge.Sarge;
 import net.jodah.sarge.SelfSupervisor;
+import net.jodah.sarge.Supervisable;
 
 import org.testng.annotations.Test;
 
@@ -19,6 +20,8 @@ public class GuiceIntegrationTest {
   private Injector injector = Guice.createInjector(new AbstractModule() {
     @Override
     protected void configure() {
+      bindInterceptor(Matchers.annotatedWith(Supervisable.class), Matchers.any(),
+          sarge.interceptor());
       bindInterceptor(Matchers.subclassesOf(SelfSupervisor.class), Matchers.any(),
           sarge.interceptor());
     }
@@ -34,10 +37,23 @@ public class GuiceIntegrationTest {
     }
   }
 
+  @Supervisable
+  static class Bar {
+    void doSomething() {
+      throw new IllegalStateException();
+    }
+  }
+
   public void shouldSuperviseGuiceInstantiatedObject() {
     Foo foo = injector.getInstance(Foo.class);
     sarge.supervise(foo);
     foo.doSomething();
+  }
+
+  public void shouldSuperviseGuiceInstantiatedSupervisableObject() {
+    Bar bar = injector.getInstance(Bar.class);
+    sarge.supervise(bar, Plans.onFailure(IllegalStateException.class, Directive.Resume).make());
+    bar.doSomething();
   }
 
   @Test(expectedExceptions = IllegalStateException.class)
