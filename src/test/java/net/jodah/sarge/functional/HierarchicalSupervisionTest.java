@@ -18,9 +18,8 @@ import org.testng.annotations.Test;
 public class HierarchicalSupervisionTest extends AbstractTest {
   private static int counter;
   private static final Plan RETRY_PLAN = Plans.retryOn(Throwable.class, 3, Duration.mins(10))
-                                              .make();
-  private static final Plan ESCALATE_PLAN = Plans.escalateOn(Throwable.class)
-                                                 .make();
+      .make();
+  private static final Plan ESCALATE_PLAN = Plans.escalateOn(Throwable.class).make();
 
   static class UberLevel implements Supervisor {
     public Plan plan() {
@@ -64,9 +63,9 @@ public class HierarchicalSupervisionTest extends AbstractTest {
     TopLevel t = new TopLevel();
     MidLevel m = new MidLevel();
     Child c = sarge.supervisable(Child.class);
-    sarge.link(u, t);
-    sarge.link(t, m);
-    sarge.link(m, c);
+    sarge.supervise(t, u);
+    sarge.supervise(m, t);
+    sarge.supervise(c, m);
 
     try {
       c.doSomething();
@@ -78,7 +77,7 @@ public class HierarchicalSupervisionTest extends AbstractTest {
   public void shouldThrowAfterRetriesExceeded() {
     TopLevel t = new TopLevel();
     Child c = sarge.supervisable(Child.class);
-    sarge.link(t, c);
+    sarge.supervise(c, t);
 
     try {
       c.doSomething();
@@ -93,8 +92,8 @@ public class HierarchicalSupervisionTest extends AbstractTest {
     TopLevelEscalate t = new TopLevelEscalate();
     MidLevel m = new MidLevel();
     Child c = sarge.supervisable(Child.class);
-    sarge.link(t, m);
-    sarge.link(m, c);
+    sarge.supervise(m, t);
+    sarge.supervise(c, m);
     c.doSomething();
   }
 }

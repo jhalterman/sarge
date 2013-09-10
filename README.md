@@ -10,9 +10,9 @@ Add Sarge as a Maven dependency:
 
 ```xml
 <dependency>
-  <groupId>org.jodah</groupId>
+  <groupId>net.jodah</groupId>
   <artifactId>sarge</artifactId>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
@@ -36,7 +36,7 @@ With our `Plan` in hand, we can create a *supervised* object:
 
 ```java
 Sarge sarge = new Sarge();
-MailService service = sarge.supervise(MailService.class, plan);
+MailService service = sarge.supervised(MailService.class, plan);
 ```    
 
 Supervision is automatically applied according to the plan when any exception occurs while invoking a method against the object:
@@ -61,17 +61,18 @@ class Parent implements Supervisor {
   }
 }
  
-Parent parent = new Parent();
+Parent parent = new Parent(); 
 Sarge sarge = new Sarge();
  
-// Create a Child that is supervised by the parent
-Child child = sarge.supervise(Child.class, parent);
+// Create a new Child that is supervised by the parent
+Child child = sarge.supervised(Child.class, parent);
 ```    
     
-We can link additional objects into the supervision hierarchy, which will handle any failures that are escalated:
+We can link additional supervisable objects into a parent-child supervision hierarchy, which will handle any failures that are escalated:
 
 ```java
-sarge.link(uberParent, parent);
+Parent parent = sarge.supervisable(Parent.class);
+sarge.supervise(parent, uberParent);
 ```
 	
 #### More on plans
@@ -103,11 +104,16 @@ class SupervisedService implements PreRetry {
 }
 ```
 
-### 3rd Party Integration
+#### 3rd Party Integration
 
-By default, supervised objects must be instantiated by Sarge since they require instrumentation. As an alternative, we can delegate instantiation of supervised objects to other libraries such as [Spring](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/SpringIntegrationTest.java) or [Guice](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/GuiceIntegrationTest.java). Have a look at the [tests](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration) for examples on how to integrate 3rd party libraries.
+By default, supervised objects must be instantiated by Sarge since they require instrumentation. As an alternative, we can delegate instantiation of supervised objects to other libraries such as [Spring](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/SpringIntegrationTest.java) or [Guice](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/GuiceIntegrationTest.java) by hooking into Sarge's MethodInterceptor. Have a look at the [tests](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration) for examples on how to integrate 3rd party libraries.
 
-	
+## FAQ
+
+* **How does Sarge work?** - Sarge creates _supervisable_ objects by instrumenting them via Cglib.
+* **What are the limitations?** - Sarge cannot supervise classes that are _final_, _protected_ or _private_, or methods that are _final_ or _private_.
+* **Do supervisors need to be instantiated by Sarge?** No, only objects you plan to supervise need to be supervisable and/or created by Sarge. 
+
 ## Thanks
 
 Sarge was inpsired by [Erlang OTP's](http://www.erlang.org/doc/design_principles/des_princ.html) supervision trees and [Akka's supervision](http://akka.io) implementation. Thanks to the their contributors for the great work.

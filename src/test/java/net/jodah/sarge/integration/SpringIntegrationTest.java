@@ -33,10 +33,10 @@ public class SpringIntegrationTest {
   }
 
   @Test(expectedExceptions = IllegalStateException.class)
-  public void shouldLinkSpringInstantiatedObject() {
+  public void shouldSuperviseSpringInstantiatedObjectWithPlan() {
     Sarge sarge = appContext.getBean(Sarge.class);
     Foo foo = appContext.getBean(Foo.class);
-    sarge.link(foo, Plans.onFailure(IllegalStateException.class, Directive.Rethrow));
+    sarge.supervise(foo, Plans.onFailure(IllegalStateException.class, Directive.Rethrow));
     foo.doSomething();
   }
 }

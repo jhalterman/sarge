@@ -41,9 +41,9 @@ public class GuiceIntegrationTest {
   }
 
   @Test(expectedExceptions = IllegalStateException.class)
-  public void shouldLinkGuiceInstantiatedObject() {
+  public void shouldSuperviseGuiceInstantiatedObjectWithPlan() {
     Foo foo = injector.getInstance(Foo.class);
-    sarge.link(foo, Plans.onFailure(IllegalStateException.class, Directive.Rethrow));
+    sarge.supervise(foo, Plans.onFailure(IllegalStateException.class, Directive.Rethrow));
     foo.doSomething();
   }
 }

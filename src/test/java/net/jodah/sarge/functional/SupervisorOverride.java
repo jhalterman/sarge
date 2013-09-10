@@ -42,13 +42,13 @@ public class SupervisorOverride extends AbstractTest {
 
   public void shouldOverrideSelfSupervisionWithParentSupervision() {
     Child child = sarge.supervised(Child.class);
-    sarge.link(new Parent(), child);
+    sarge.supervise(child, new Parent());
     child.doSomething();
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldNotAllowSelfSupervisionOverride() {
     Child child = sarge.supervised(Child.class, new Parent());
-    sarge.link(new Parent(), child);
+    sarge.supervise(child, new Parent());
   }
 }

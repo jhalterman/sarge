@@ -20,18 +20,18 @@ public class SupervisionRegistry {
     return plans.get(supervised);
   }
 
-  public void supervise(Object supervised, Plan strategy) {
-    plans.put(supervised, strategy);
+  public void supervise(Object supervisable, Plan strategy) {
+    plans.put(supervisable, strategy);
   }
 
   /**
    * @throws IllegalArgumentException if {@code supervised} is already supervised
    */
-  public void supervise(Object supervised, Supervisor supervisor) {
-    Supervisor existingSupervisor = supervisors.get(supervised);
+  public void supervise(Object supervisable, Supervisor supervisor) {
+    Supervisor existingSupervisor = supervisors.get(supervisable);
     if (existingSupervisor != null)
-      throw new IllegalArgumentException(supervised + " is already supervised");
-    supervisors.put(supervised, supervisor);
+      throw new IllegalArgumentException(supervisable + " is already supervised");
+    supervisors.put(supervisable, supervisor);
   }
 
   /** Returns the supervisor for the {@code supervised}. */
