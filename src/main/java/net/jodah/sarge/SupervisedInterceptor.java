@@ -20,6 +20,10 @@ import org.aopalliance.intercept.MethodInvocation;
 public class SupervisedInterceptor implements MethodInterceptor {
   private final SupervisionRegistry registry;
 
+  /**
+   * Creates a SupervisedInterceptor that intercepts invocations of objects that are supervised by
+   * the {@code sarge}.
+   */
   public SupervisedInterceptor(Sarge sarge) {
     this.registry = sarge.registry;
   }
