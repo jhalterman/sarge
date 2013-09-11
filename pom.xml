@@ -15,10 +15,6 @@
   <name>Sarge</name>
   <url>http://github.com/jhalterman/sarge/</url>
 
-  <properties>
-    <version.number>0.2.0</version.number>
-  </properties>
-
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -128,13 +124,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <finalName>${artifactId}-${version.number}</finalName>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
