@@ -1,11 +1,9 @@
 #!/bin/sh
-# run from bin dir
-cd ../
+# run from top level dir
 rm -rf docs
 git clone git@github.com:jhalterman/sarge.git docs -b gh-pages
-cd core
-mvn -Pjavadoc javadoc:javadoc
-cd ../docs
+mvn javadoc:javadoc
+cd docs
 git add -A
-git commit -m "updated javadocs"
+git commit -m "Updated JavaDocs"
 git push origin gh-pages

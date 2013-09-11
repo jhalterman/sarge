@@ -136,19 +136,6 @@
           <finalName>${artifactId}-${version.number}</finalName>
         </configuration>
       </plugin>
-    </plugins>
-  </build>
-
-  <repositories>
-    <repository>
-      <id>springsource-repo</id>
-      <name>SpringSource Repository</name>
-      <url>http://repo.springsource.org/release</url>
-    </repository>
-  </repositories>
-
-  <reporting>
-    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -161,6 +148,14 @@
         </configuration>
       </plugin>
     </plugins>
-  </reporting>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>springsource-repo</id>
+      <name>SpringSource Repository</name>
+      <url>http://repo.springsource.org/release</url>
+    </repository>
+  </repositories>
 
 </project>
