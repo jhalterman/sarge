@@ -14,6 +14,7 @@ import org.testng.annotations.Test;
 public class SpringIntegrationTest {
   private ApplicationContext appContext = new ClassPathXmlApplicationContext(new String[] {
       "sarge-beans.xml", "test-beans.xml" });
+  private Sarge sarge = appContext.getBean(Sarge.class);
 
   static class Foo implements SelfSupervisor {
     void doSomething() {
@@ -26,7 +27,6 @@ public class SpringIntegrationTest {
   }
 
   public void shouldSuperviseSpringInstantiatedObject() {
-    Sarge sarge = appContext.getBean(Sarge.class);
     Foo foo = appContext.getBean(Foo.class);
     sarge.supervise(foo);
     foo.doSomething();
@@ -34,7 +34,6 @@ public class SpringIntegrationTest {
 
   @Test(expectedExceptions = IllegalStateException.class)
   public void shouldSuperviseSpringInstantiatedObjectWithPlan() {
-    Sarge sarge = appContext.getBean(Sarge.class);
     Foo foo = appContext.getBean(Foo.class);
     sarge.supervise(foo, Plans.onFailure(IllegalStateException.class, Directive.Rethrow));
     foo.doSomething();
