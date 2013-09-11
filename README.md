@@ -30,7 +30,7 @@ Plan plan = Plans
       
 This Plan retries any method invocations that fail with a TimeoutException, escalates any ConnectionClosedExceptions, and rethrows any IllegalArgumentExceptions and IllegalStateExceptions.      
 
-#### Supervision
+### Supervision
 
 With our `Plan` in hand, we can create a *supervised* object:
 
@@ -46,7 +46,7 @@ Supervision is automatically applied according to the plan when any exception oc
 service.sendMail();
 ```
     
-#### Hierarchical supervision
+### Hierarchical supervision
 
 Sarge can create a parent/child supervision hierarchy where the `Supervisor`'s plan is applied to any failures that occur in the child:
 
@@ -75,7 +75,7 @@ Parent parent = sarge.supervisable(Parent.class);
 sarge.supervise(parent, uberParent);
 ```
 	
-#### More on plans
+### More on plans
 
 Aside from the `Plans` class, Plans can also be constructed directly by implementing the `Plan` interface and returning the desired `Directive` for handling each failure:
 
@@ -90,7 +90,7 @@ Plan plan = new Plan() {
 };
 ```
     
-#### Lifecycle hooks
+### Lifecycle hooks
 
 Lifecycle hooks allow supervised objects to be notified prior to a supervision directive being carried out, allowing an object to reset its internal state if necessary:
 
@@ -104,7 +104,7 @@ class SupervisedService implements PreRetry {
 }
 ```
 
-#### 3rd Party Integration
+### 3rd Party Integration
 
 By default, supervised objects must be instantiated by Sarge since they require instrumentation. As an alternative, we can delegate instantiation of supervised objects to other libraries such as [Spring](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/SpringIntegrationTest.java) or [Guice](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/GuiceIntegrationTest.java) by hooking into Sarge's [SupervisedInterceptor](https://github.com/jhalterman/sarge/javadoc/net/jodah/sarge/SupervisedInterceptor.html). Have a look at the [tests](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration) for examples on how to integrate 3rd party libraries.
 
