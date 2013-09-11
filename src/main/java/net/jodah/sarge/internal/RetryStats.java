@@ -67,12 +67,12 @@ public final class RetryStats {
     }
   }
 
-  void resetBackoff() {
-    backoffReady = false;
-    waitTime = initialRetryIntervalMillis;
+  public long getWaitTime() {
+    return waitTime;
   }
 
-  long getWaitTime() {
-    return waitTime;
+  public void resetBackoff() {
+    backoffReady = false;
+    waitTime = initialRetryIntervalMillis;
   }
 }

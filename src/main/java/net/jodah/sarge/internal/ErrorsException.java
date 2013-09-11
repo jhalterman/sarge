@@ -15,7 +15,6 @@
  */
 package net.jodah.sarge.internal;
 
-
 /**
  * @author Jonathan Halterman
  */

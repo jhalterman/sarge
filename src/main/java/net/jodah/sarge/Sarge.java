@@ -1,11 +1,8 @@
 package net.jodah.sarge;
 
 import net.jodah.sarge.internal.ProxyFactory;
-import net.jodah.sarge.internal.SupervisedInterceptor;
 import net.jodah.sarge.internal.SupervisionRegistry;
 import net.jodah.sarge.internal.util.Assert;
-
-import org.aopalliance.intercept.MethodInterceptor;
 
 import com.google.inject.ProvisionException;
 
@@ -15,15 +12,7 @@ import com.google.inject.ProvisionException;
  * @author Jonathan Halterman
  */
 public class Sarge {
-  private final SupervisionRegistry registry = new SupervisionRegistry();
-  private final ProxyFactory proxyFactory = new ProxyFactory(registry);
-
-  /**
-   * Returns a method interceptor that can be used to integrate Sarge with 3rd party libraries.
-   */
-  public MethodInterceptor interceptor() {
-    return new SupervisedInterceptor(registry);
-  }
+  final SupervisionRegistry registry = new SupervisionRegistry();
 
   /**
    * Returns an instance of the {@code type} that is capable of being supervised by calling one of
@@ -33,7 +22,7 @@ public class Sarge {
    */
   public <T> T supervisable(Class<T> type) {
     Assert.notNull(type, "type");
-    return proxyFactory.proxyFor(type);
+    return ProxyFactory.proxyFor(type, this);
   }
 
   /**
@@ -100,7 +89,7 @@ public class Sarge {
   public <C, S extends Supervisor> C supervised(Class<C> type, S supervisor) {
     Assert.notNull(type, "type");
     Assert.notNull(supervisor, "supervisor");
-    C supervisable = proxyFactory.proxyFor(type);
+    C supervisable = ProxyFactory.proxyFor(type, this);
     supervise(supervisable, supervisor);
     return supervisable;
   }
@@ -114,7 +103,7 @@ public class Sarge {
    */
   public <T extends SelfSupervisor> T supervised(Class<T> selfSupervisable) {
     Assert.notNull(selfSupervisable, "selfSupervisable");
-    T supervisable = proxyFactory.proxyFor(selfSupervisable);
+    T supervisable = ProxyFactory.proxyFor(selfSupervisable, this);
     supervise(supervisable, supervisable.selfPlan());
     return supervisable;
   }
@@ -128,7 +117,7 @@ public class Sarge {
   public <T> T supervised(Class<T> type, Plan plan) {
     Assert.notNull(type, "type");
     Assert.notNull(plan, "plan");
-    T supervisable = proxyFactory.proxyFor(type);
+    T supervisable = ProxyFactory.proxyFor(type, this);
     supervise(supervisable, plan);
     return supervisable;
   }

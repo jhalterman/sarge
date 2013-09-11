@@ -6,6 +6,7 @@ import net.jodah.sarge.Plans;
 import net.jodah.sarge.Sarge;
 import net.jodah.sarge.SelfSupervisor;
 import net.jodah.sarge.Supervisable;
+import net.jodah.sarge.SupervisedInterceptor;
 
 import org.testng.annotations.Test;
 
@@ -20,10 +21,9 @@ public class GuiceIntegrationTest {
   private Injector injector = Guice.createInjector(new AbstractModule() {
     @Override
     protected void configure() {
-      bindInterceptor(Matchers.annotatedWith(Supervisable.class), Matchers.any(),
-          sarge.interceptor());
-      bindInterceptor(Matchers.subclassesOf(SelfSupervisor.class), Matchers.any(),
-          sarge.interceptor());
+      SupervisedInterceptor interceptor = new SupervisedInterceptor(sarge);
+      bindInterceptor(Matchers.subclassesOf(SelfSupervisor.class), Matchers.any(), interceptor);
+      bindInterceptor(Matchers.annotatedWith(Supervisable.class), Matchers.any(), interceptor);
     }
   });
 

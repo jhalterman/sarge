@@ -1,11 +1,12 @@
-package net.jodah.sarge.internal;
+package net.jodah.sarge;
 
 import java.lang.reflect.Method;
 
-import net.jodah.sarge.Directive;
 import net.jodah.sarge.Lifecycle.PreRetry;
-import net.jodah.sarge.Plan;
-import net.jodah.sarge.Supervisor;
+import net.jodah.sarge.internal.RetryContextRegistry;
+import net.jodah.sarge.internal.RetryDirective;
+import net.jodah.sarge.internal.RetryStats;
+import net.jodah.sarge.internal.SupervisionRegistry;
 import net.jodah.sarge.internal.util.Types;
 
 import org.aopalliance.intercept.MethodInterceptor;
@@ -19,8 +20,8 @@ import org.aopalliance.intercept.MethodInvocation;
 public class SupervisedInterceptor implements MethodInterceptor {
   private final SupervisionRegistry registry;
 
-  public SupervisedInterceptor(SupervisionRegistry registry) {
-    this.registry = registry;
+  public SupervisedInterceptor(Sarge sarge) {
+    this.registry = sarge.registry;
   }
 
   private static Object proxyFor(MethodInvocation invocation) {

@@ -3,7 +3,6 @@ package net.jodah.sarge.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public final class Errors {
   private List<ErrorMessage> errors;
 
@@ -12,7 +11,7 @@ public final class Errors {
 
   public static String format(String messageFormat, Object... arguments) {
     for (int i = 0; i < arguments.length; i++)
-      arguments[i] = arguments[i]; // Errors.convert(arguments[i]);
+      arguments[i] = arguments[i];
     return String.format(messageFormat, arguments);
   }
 

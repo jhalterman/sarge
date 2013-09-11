@@ -11,7 +11,7 @@ import java.util.WeakHashMap;
 public class RetryContextRegistry {
   static final Map<Object, RetryContext> CONTEXTS = new WeakHashMap<Object, RetryContext>();
 
-  static RetryContext contextFor(Object supervised, RetryDirective directive) {
+ public static RetryContext contextFor(Object supervised, RetryDirective directive) {
     // DCL
     RetryContext context = CONTEXTS.get(supervised);
     if (context == null) {
