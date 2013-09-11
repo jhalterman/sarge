@@ -4,8 +4,6 @@ import net.jodah.sarge.internal.ProxyFactory;
 import net.jodah.sarge.internal.SupervisionRegistry;
 import net.jodah.sarge.internal.util.Assert;
 
-import com.google.inject.ProvisionException;
-
 /**
  * Creates supervised objects, with failures being handled according to a {@link Plan}.
  * 
@@ -19,6 +17,7 @@ public class Sarge {
    * the supervise methods.
    * 
    * @throws NullPointerException if {@code type} is null
+   * @throws ProxyException if there was a failure while proxying the {@code type}
    */
   public <T> T supervisable(Class<T> type) {
     Assert.notNull(type, "type");
@@ -84,7 +83,7 @@ public class Sarge {
    * {@code supervisor} and the result where failures can be escalated.
    * 
    * @throws NullPointerException if {@code type} or {@code supervisor} are null
-   * @throws ProvisionException if there was a runtime failure while providing an instance
+   * @throws ProxyException if there was a failure while proxying the {@code type}
    */
   public <C, S extends Supervisor> C supervised(Class<C> type, S supervisor) {
     Assert.notNull(type, "type");
@@ -99,7 +98,7 @@ public class Sarge {
    * {@code selfSupervisable}'s {@link SelfSupervisor#selfPlan() selfPlan}.
    * 
    * @throws NullPointerException if {@code selfSupervisable} is null
-   * @throws ProvisionException if there was a runtime failure while providing an instance
+   * @throws ProxyException if there was a failure while proxying the {@code selfSupervisable}
    */
   public <T extends SelfSupervisor> T supervised(Class<T> selfSupervisable) {
     Assert.notNull(selfSupervisable, "selfSupervisable");
@@ -112,7 +111,7 @@ public class Sarge {
    * Returns an instance of the {@code type} that is supervised by the {@code plan}.
    * 
    * @throws NullPointerException if {@code supervisedType} or {@code plan} are null
-   * @throws ProvisionException if there was a runtime failure while providing an instance
+   * @throws ProxyException if there was a failure while proxying the {@code type}
    */
   public <T> T supervised(Class<T> type, Plan plan) {
     Assert.notNull(type, "type");
@@ -127,7 +126,7 @@ public class Sarge {
    * {@link PlanMaker#make() plan}.
    * 
    * @throws NullPointerException if {@code type} or {@code planMaker} are null
-   * @throws ProvisionException if there was a runtime failure while providing an instance
+   * @throws ProxyException if there was a failure while proxying the {@code type}
    */
   public <T> T supervised(Class<T> type, PlanMaker planMaker) {
     Assert.notNull(type, "type");

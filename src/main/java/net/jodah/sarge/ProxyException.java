@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.jodah.sarge.internal;
+package net.jodah.sarge;
 
 /**
+ * Thrown when a failure occurs while attempting to proxy a type.
+ * 
  * @author Jonathan Halterman
  */
-public class ErrorsException extends RuntimeException {
+public class ProxyException extends RuntimeException {
   private static final long serialVersionUID = 1L;
-  private final Errors errors;
 
-  public ErrorsException(Errors errors) {
-    this.errors = errors;
-  }
-
-  public Errors getErrors() {
-    return errors;
+  public ProxyException(Throwable failure, String format, Object... args) {
+    super(String.format(format, args), failure);
   }
 }

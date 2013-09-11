@@ -1,8 +1,8 @@
 package net.jodah.sarge.internal;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
+import net.jodah.sarge.ProxyException;
 import net.jodah.sarge.Sarge;
 import net.jodah.sarge.SupervisedInterceptor;
 import net.sf.cglib.core.DefaultNamingPolicy;
@@ -35,23 +35,22 @@ public class ProxyFactory {
   };
 
   /**
-   * @throws ErrorsException if the proxy for {@code type} cannot be generated or instantiated
+   * @throws ProxyException if the proxy for {@code type} cannot be generated or instantiated
    */
   public static <T> T proxyFor(Class<T> type, Sarge sarge) {
-    if (Modifier.isFinal(type.getModifiers()))
-      return null;
-
-    Class<?> enhanced = proxyClassFor(type);
+    Class<?> enhanced = null;
 
     try {
+      enhanced = proxyClassFor(type);
       Enhancer.registerCallbacks(enhanced, new Callback[] {
           new CglibMethodInterceptor(new SupervisedInterceptor(sarge)), NoOp.INSTANCE });
       T result = type.cast(enhanced.newInstance());
       return result;
     } catch (Throwable t) {
-      throw new Errors().errorInstantiatingProxy(type, t).toException();
+      throw Errors.errorInstantiatingProxy(type, t);
     } finally {
-      Enhancer.registerCallbacks(enhanced, null);
+      if (enhanced != null)
+        Enhancer.registerCallbacks(enhanced, null);
     }
   }
 
@@ -63,11 +62,6 @@ public class ProxyFactory {
     enhancer.setNamingPolicy(NAMING_POLICY);
     enhancer.setCallbackFilter(METHOD_FILTER);
     enhancer.setCallbackTypes(new Class[] { MethodInterceptor.class, NoOp.class });
-
-    try {
-      return enhancer.createClass();
-    } catch (Throwable t) {
-      throw new Errors().errorEnhancingClass(type, t).toException();
-    }
+    return enhancer.createClass();
   }
 }
