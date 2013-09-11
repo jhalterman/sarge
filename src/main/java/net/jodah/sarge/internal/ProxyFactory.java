@@ -2,7 +2,6 @@ package net.jodah.sarge.internal;
 
 import java.lang.reflect.Method;
 
-import net.jodah.sarge.ProxyException;
 import net.jodah.sarge.Sarge;
 import net.jodah.sarge.SupervisedInterceptor;
 import net.sf.cglib.core.DefaultNamingPolicy;
@@ -35,7 +34,8 @@ public class ProxyFactory {
   };
 
   /**
-   * @throws ProxyException if the proxy for {@code type} cannot be generated or instantiated
+   * @throws IllegalArgumentException if the proxy for {@code type} cannot be generated or
+   *           instantiated
    */
   public static <T> T proxyFor(Class<T> type, Sarge sarge) {
     Class<?> enhanced = null;

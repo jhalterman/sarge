@@ -17,7 +17,7 @@ public class Sarge {
    * the supervise methods.
    * 
    * @throws NullPointerException if {@code type} is null
-   * @throws ProxyException if there was a failure while proxying the {@code type}
+   * @throws IllegalArgumentException if the {@code type} cannot be supervised
    */
   public <T> T supervisable(Class<T> type) {
     Assert.notNull(type, "type");
@@ -28,7 +28,7 @@ public class Sarge {
    * Supervises the {@code supervisable} object according to the {@code plan}.
    * 
    * @throws NullPointerException if {@code supervisable} or {@code plan} are null
-   * @throws IllegalArgumentException if {@code supervised} is already supervised
+   * @throws IllegalArgumentException if the {@code supervised} is already supervised
    */
   public void supervise(Object supervisable, Plan plan) {
     Assert.notNull(supervisable, "supervisable");
@@ -41,12 +41,29 @@ public class Sarge {
    * {@link PlanMaker#make() plan}.
    * 
    * @throws NullPointerException if {@code supervisable} or {@code planMaker} are null
-   * @throws IllegalArgumentException if {@code supervised} is already supervised
+   * @throws IllegalArgumentException if the {@code supervised} is already supervised
    */
   public void supervise(Object supervisable, PlanMaker planMaker) {
     Assert.notNull(supervisable, "supervisable");
     Assert.notNull(planMaker, "planMaker");
     registry.supervise(supervisable, planMaker.make());
+  }
+
+  /**
+   * Supervises the {@code supervisable} object with the {@code supervisor}'s
+   * {@link Supervisor#plan() plan}, forming a parent-child supervision relationship between the
+   * {@code supervisor} and {@code supervisable} where failures can be escalated.
+   * 
+   * <p>
+   * Any self-supervision for the {@code supervisable} is overriden.
+   * 
+   * @throws NullPointerException if {@code supervised} or {@code supervisor} are null
+   * @throws IllegalArgumentException if the {@code supervisable} is already supervised
+   */
+  public <T extends Supervisor> void supervise(Object supervisable, T supervisor) {
+    Assert.notNull(supervisable, "supervisable");
+    Assert.notNull(supervisor, "supervisor");
+    registry.supervise(supervisable, supervisor);
   }
 
   /**
@@ -61,29 +78,12 @@ public class Sarge {
   }
 
   /**
-   * Supervises the {@code supervisable} object with the {@code supervisor}'s
-   * {@link Supervisor#plan() plan}, forming a parent-child supervision relationship between the
-   * {@code supervisor} and {@code supervisable} where failures can be escalated.
-   * 
-   * <p>
-   * Any self-supervision for the {@code supervisable} is overriden.
-   * 
-   * @throws NullPointerException if {@code supervised} or {@code supervisor} are null
-   * @throws IllegalArgumentException if {@code supervisable} is already supervised
-   */
-  public <T extends Supervisor> void supervise(Object supervisable, T supervisor) {
-    Assert.notNull(supervisable, "supervisable");
-    Assert.notNull(supervisor, "supervisor");
-    registry.supervise(supervisable, supervisor);
-  }
-
-  /**
    * Returns an instance of the {@code type} that is supervised by the {@code supervisor}'s
    * {@link Supervisor#plan() plan}, forming a parent-child supervision relationship between the
    * {@code supervisor} and the result where failures can be escalated.
    * 
    * @throws NullPointerException if {@code type} or {@code supervisor} are null
-   * @throws ProxyException if there was a failure while proxying the {@code type}
+   * @throws IllegalArgumentException if the {@code type} cannot be supervised
    */
   public <C, S extends Supervisor> C supervised(Class<C> type, S supervisor) {
     Assert.notNull(type, "type");
@@ -98,7 +98,7 @@ public class Sarge {
    * {@code selfSupervisable}'s {@link SelfSupervisor#selfPlan() selfPlan}.
    * 
    * @throws NullPointerException if {@code selfSupervisable} is null
-   * @throws ProxyException if there was a failure while proxying the {@code selfSupervisable}
+   * @throws IllegalArgumentException if the {@code selfSupervisable} cannot be supervised
    */
   public <T extends SelfSupervisor> T supervised(Class<T> selfSupervisable) {
     Assert.notNull(selfSupervisable, "selfSupervisable");
@@ -110,8 +110,8 @@ public class Sarge {
   /**
    * Returns an instance of the {@code type} that is supervised by the {@code plan}.
    * 
-   * @throws NullPointerException if {@code supervisedType} or {@code plan} are null
-   * @throws ProxyException if there was a failure while proxying the {@code type}
+   * @throws NullPointerException if {@code type} or {@code plan} are null
+   * @throws IllegalArgumentException if the {@code type} cannot be supervised
    */
   public <T> T supervised(Class<T> type, Plan plan) {
     Assert.notNull(type, "type");
@@ -126,7 +126,7 @@ public class Sarge {
    * {@link PlanMaker#make() plan}.
    * 
    * @throws NullPointerException if {@code type} or {@code planMaker} are null
-   * @throws ProxyException if there was a failure while proxying the {@code type}
+   * @throws IllegalArgumentException if the {@code type} cannot be supervised
    */
   public <T> T supervised(Class<T> type, PlanMaker planMaker) {
     Assert.notNull(type, "type");
