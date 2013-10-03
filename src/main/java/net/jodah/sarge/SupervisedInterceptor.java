@@ -83,8 +83,11 @@ public class SupervisedInterceptor implements MethodInterceptor {
         cause = t;
         if (LOG.isDebugEnabled())
           LOG.error("Invocation of {} failed.", Reflection.toString(method), t);
-        else
-          LOG.error("Invocation of {} failed. {}", Reflection.toString(method), t.getMessage());
+        else if (LOG.isErrorEnabled()) {
+          String message = t.getMessage();
+          LOG.error("Invocation of {} failed. {}", Reflection.toString(method),
+              message == null ? "" : message);
+        }
 
         // Supervision hierarchy traversal
         while (true) {

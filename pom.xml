@@ -36,6 +36,10 @@
     <url>http://github.com/jhalterman/sarge/</url>
   </scm>
 
+  <properties>
+    <logback.version>1.0.13</logback.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>cglib</groupId>
@@ -63,6 +67,18 @@
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
       <version>3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>${logback.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
