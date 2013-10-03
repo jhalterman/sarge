@@ -7,10 +7,13 @@ import net.jodah.sarge.internal.RetryContextRegistry;
 import net.jodah.sarge.internal.RetryDirective;
 import net.jodah.sarge.internal.RetryStats;
 import net.jodah.sarge.internal.SupervisionRegistry;
+import net.jodah.sarge.internal.util.Reflection;
 import net.jodah.sarge.internal.util.Types;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Intercepts supervised object method invocations and applies a {@link Plan} for any failures.
@@ -18,6 +21,7 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author Jonathan Halterman
  */
 public class SupervisedInterceptor implements MethodInterceptor {
+  private static final Logger LOG = LoggerFactory.getLogger(SupervisedInterceptor.class);
   private final SupervisionRegistry registry;
 
   /**
@@ -77,6 +81,10 @@ public class SupervisedInterceptor implements MethodInterceptor {
         return result;
       } catch (Throwable t) {
         cause = t;
+        if (LOG.isDebugEnabled())
+          LOG.error("Invocation of {} failed.", Reflection.toString(method), t);
+        else
+          LOG.error("Invocation of {} failed. {}", Reflection.toString(method), t.getMessage());
 
         // Supervision hierarchy traversal
         while (true) {
