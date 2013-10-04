@@ -12,7 +12,7 @@ Add Sarge as a Maven dependency:
 <dependency>
   <groupId>net.jodah</groupId>
   <artifactId>sarge</artifactId>
-  <version>0.3.0</version>
+  <version>0.3.1</version>
 </dependency>
 ```
 
@@ -107,6 +107,10 @@ class SupervisedService implements PreRetry {
 #### 3rd Party Integration
 
 By default, supervised objects must be instantiated by Sarge since they require instrumentation. As an alternative, we can delegate instantiation of supervised objects to other libraries such as [Spring](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/SpringIntegrationTest.java) or [Guice](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration/GuiceIntegrationTest.java) by hooking into Sarge's [SupervisedInterceptor](https://jhalterman.github.com/sarge/javadoc/net/jodah/sarge/SupervisedInterceptor.html). Have a look at the [tests](https://github.com/jhalterman/sarge/tree/master/src/test/java/net/jodah/sarge/integration) for examples on how to integrate 3rd party libraries.
+
+#### Logging
+
+Logging is provided via the [slf4j](http://www.slf4j.org/) [API](http://www.slf4j.org/apidocs/index.html). Invocation exceptions are logged at the ERROR level and include only the exception message. Full exception logging can be enabled by setting the DEBUG log level for the `net.jodah.sarge` category.
 
 ## Docs
 
