@@ -1,4 +1,4 @@
-# Sarge
+# Sarge [![Build Status](https://travis-ci.org/jhalterman/sarge.png)](https://travis-ci.org/jhalterman/sarge)
 
 *Simple object supervision (for when stuff goes wrong)*
 
