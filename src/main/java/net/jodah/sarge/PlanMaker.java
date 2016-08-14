@@ -128,13 +128,13 @@ public class PlanMaker {
 
   /**
    * Perform a retry when a failure of any of the {@code causeTypes} occurs, retrying up to
-   * {@code maxRetries} times within the {@code timeRange} with zero wait time between retries.
+   * {@code maxRetries} times within the {@code retryWindow} with zero wait time between retries.
    * 
    * @throws NullPointerException if {@code causeTypes} is null
    */
   public PlanMaker retryOn(Class<? extends Throwable>[] causeTypes, int maxRetries,
-      Duration timeRange) {
-    return addDirective(Directive.Retry(maxRetries, timeRange), causeTypes);
+      Duration retryWindow) {
+    return addDirective(Directive.Retry(maxRetries, retryWindow), causeTypes);
   }
 
   /**
