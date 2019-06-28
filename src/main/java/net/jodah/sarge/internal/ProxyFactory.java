@@ -26,6 +26,7 @@ public class ProxyFactory {
   };
 
   private static final CallbackFilter METHOD_FILTER = new CallbackFilter() {
+    @Override
     public int accept(Method method) {
       return method.isBridge()
           || (method.getName().equals("finalize") && method.getParameterTypes().length == 0) ? 1
@@ -38,13 +39,24 @@ public class ProxyFactory {
    *           instantiated
    */
   public static <T> T proxyFor(Class<T> type, Sarge sarge) {
+    return proxyFor(type, new Object[]{}, sarge);
+  }
+  
+  public static <T> T proxyFor(Class<T> type, Object[] args, Sarge sarge) {
     Class<?> enhanced = null;
 
     try {
+      Class[] argumentTypes= new Class[]{};
+      if(args.length > 0) {
+        argumentTypes = new Class[args.length];
+        for(int i=0; i<args.length; i++){
+          argumentTypes[i] = args[i].getClass();
+        }
+      }
       enhanced = proxyClassFor(type);
       Enhancer.registerCallbacks(enhanced, new Callback[] {
           new CglibMethodInterceptor(new SupervisedInterceptor(sarge)), NoOp.INSTANCE });
-      T result = type.cast(enhanced.newInstance());
+      T result = type.cast(enhanced.getDeclaredConstructor(argumentTypes).newInstance(args));
       return result;
     } catch (Throwable t) {
       throw Errors.errorInstantiatingProxy(type, t);

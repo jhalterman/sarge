@@ -1,9 +1,6 @@
 package net.jodah.sarge;
 
 import static org.testng.Assert.fail;
-import net.jodah.sarge.Directive;
-import net.jodah.sarge.Plan;
-import net.jodah.sarge.Sarge;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
