@@ -13,18 +13,6 @@ public class ProxyFactoryTest
   {
   }
 
-  private class Dummy
-  {
-    private final String s;
-    private final Integer i;
-
-    public Dummy(String s, Integer i)
-    {
-      this.s = s;
-      this.i = i;
-    }
-  }
-
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void proxyForShouldThrowForRestrictedTypes()
   {
