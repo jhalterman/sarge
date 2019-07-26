@@ -1,20 +1,13 @@
-# Sarge [![Build Status](https://travis-ci.org/jhalterman/sarge.png)](https://travis-ci.org/jhalterman/sarge)
+# Sarge
+
+[![Build Status](https://travis-ci.org/jhalterman/sarge.svg)](https://travis-ci.org/jhalterman/sarge)
+[![Maven Central](https://img.shields.io/maven-central/v/net.jodah/sarge.svg?maxAge=60&colorB=53C92E)][maven] 
+[![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![JavaDoc](https://img.shields.io/maven-central/v/net.jodah/sarge.svg?maxAge=60&label=javadoc&color=blue)](https://jhalterman.github.com/sarge/javadoc)
 
 *Simple object supervision (for when stuff goes wrong)*
 
 Sarge creates *supervised* objects which *automatically* handle failures when they occur by performing retries, state resets, and failure escalation, allowing for easy and robust fault tolerance with little effort.
-
-## Setup
-
-Add Sarge as a Maven dependency:
-
-```xml
-<dependency>
-  <groupId>net.jodah</groupId>
-  <artifactId>sarge</artifactId>
-  <version>0.3.1</version>
-</dependency>
-```
 
 ## Usage
 
@@ -127,3 +120,5 @@ Sarge was inpsired by [Erlang OTP's](http://www.erlang.org/doc/design_principles
 ## License
 
 Copyright 2012-2013 Jonathan Halterman - Released under the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0.html).
+
+[maven]: https://maven-badges.herokuapp.com/maven-central/net.jodah/sarge
