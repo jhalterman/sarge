@@ -9,7 +9,7 @@
 
   <groupId>net.jodah</groupId>
   <artifactId>sarge</artifactId>
-  <version>0.3.2</version>
+  <version>0.3.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Sarge</name>
   <url>http://github.com/jhalterman/sarge/</url>
