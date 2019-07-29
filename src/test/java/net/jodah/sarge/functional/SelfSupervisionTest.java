@@ -1,18 +1,17 @@
 package net.jodah.sarge.functional;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
 import net.jodah.sarge.AbstractTest;
 import net.jodah.sarge.Directive;
 import net.jodah.sarge.Plan;
 import net.jodah.sarge.SelfSupervisor;
-import net.jodah.sarge.util.Duration;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.time.Duration;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 /**
  * @author Jonathan Halterman
@@ -22,7 +21,7 @@ public class SelfSupervisionTest extends AbstractTest {
   private static int counter;
   private static final Plan RETRY_PLAN = new Plan() {
     public Directive apply(Throwable cause) {
-      return Directive.Retry(3, Duration.mins(10));
+      return Directive.Retry(3, Duration.ofMinutes(10));
     }
   };
   private static final Plan ESCALATE_PLAN = new Plan() {
@@ -79,7 +78,7 @@ public class SelfSupervisionTest extends AbstractTest {
     public Plan selfPlan() {
       return new Plan() {
         public Directive apply(Throwable cause) {
-          return Directive.Retry(2, Duration.millis(100));
+          return Directive.Retry(2, Duration.ofMillis(100));
         }
       };
     }

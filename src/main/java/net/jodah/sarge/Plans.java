@@ -1,6 +1,6 @@
 package net.jodah.sarge;
 
-import net.jodah.sarge.util.Duration;
+import java.time.Duration;
 
 /**
  * Defines a strategy for supervising objects.

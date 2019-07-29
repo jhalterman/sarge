@@ -1,12 +1,11 @@
 package net.jodah.sarge.internal;
 
+import org.testng.annotations.Test;
+
+import java.time.Duration;
+
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
-import net.jodah.sarge.internal.RetryDirective;
-import net.jodah.sarge.internal.RetryStats;
-import net.jodah.sarge.util.Duration;
-
-import org.testng.annotations.Test;
 
 /**
  * @author Jonathan Halterman
@@ -14,7 +13,7 @@ import org.testng.annotations.Test;
 @Test
 public class RetryStatsTest {
   public void shouldAllowRetryWhenAttemptsNotExceeded() throws Exception {
-    RetryStats stats = new RetryStats(new RetryDirective(3, Duration.millis(50)));
+    RetryStats stats = new RetryStats(new RetryDirective(3, Duration.ofMillis(50)));
     assertTrue(stats.canRetry());
     stats.canRetry();
     stats.canRetry();
@@ -23,7 +22,7 @@ public class RetryStatsTest {
   }
 
   public void shouldAllowRetryWhenAttemptsExceededOutsideOfWindow() throws Exception {
-    RetryStats stats = new RetryStats(new RetryDirective(3, Duration.millis(50)));
+    RetryStats stats = new RetryStats(new RetryDirective(3, Duration.ofMillis(50)));
     stats.canRetry();
     stats.canRetry();
     assertTrue(stats.canRetry());
@@ -34,7 +33,7 @@ public class RetryStatsTest {
   }
 
   public void shouldNotAllowRetryWhenAttemptsExceededWithinWindow() throws Exception {
-    RetryStats stats = new RetryStats(new RetryDirective(3, Duration.millis(50)));
+    RetryStats stats = new RetryStats(new RetryDirective(3, Duration.ofMillis(50)));
     stats.canRetry();
     assertTrue(stats.canRetry());
     stats.canRetry();

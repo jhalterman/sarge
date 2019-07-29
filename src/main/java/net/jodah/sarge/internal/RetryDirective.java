@@ -1,7 +1,8 @@
 package net.jodah.sarge.internal;
 
 import net.jodah.sarge.Directive;
-import net.jodah.sarge.util.Duration;
+
+import java.time.Duration;
 
 /**
  * Directive that encapsulates retry information.

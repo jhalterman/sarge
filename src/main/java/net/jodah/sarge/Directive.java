@@ -1,7 +1,8 @@
 package net.jodah.sarge;
 
 import net.jodah.sarge.internal.RetryDirective;
-import net.jodah.sarge.util.Duration;
+
+import java.time.Duration;
 
 /**
  * Determine how failures should be handled.

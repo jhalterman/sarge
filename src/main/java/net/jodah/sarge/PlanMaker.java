@@ -1,10 +1,10 @@
 package net.jodah.sarge;
 
+import net.jodah.sarge.internal.util.Assert;
+
+import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.jodah.sarge.internal.util.Assert;
-import net.jodah.sarge.util.Duration;
 
 /**
  * Makes a {@link Plan}.

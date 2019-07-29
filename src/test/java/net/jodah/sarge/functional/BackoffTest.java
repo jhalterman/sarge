@@ -1,13 +1,12 @@
 package net.jodah.sarge.functional;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
 import net.jodah.sarge.AbstractTest;
 import net.jodah.sarge.Plans;
-import net.jodah.sarge.util.Duration;
-
 import org.testng.annotations.Test;
+
+import java.time.Duration;
+
+import static org.testng.Assert.*;
 
 /**
  * @author Jonathan Halterman
@@ -25,7 +24,7 @@ public class BackoffTest extends AbstractTest {
 
   public void shouldBackoff() {
     Foo foo = sarge.supervised(Foo.class, Plans.retryOn(IllegalStateException.class, 5,
-        Duration.inf(), Duration.millis(100), Duration.millis(800)));
+        Duration.ofDays(1), Duration.ofMillis(100), Duration.ofMillis(800)));
 
     long startTime = System.currentTimeMillis();
 

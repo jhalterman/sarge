@@ -6,10 +6,11 @@ import net.jodah.sarge.AbstractTest;
 import net.jodah.sarge.Plan;
 import net.jodah.sarge.Plans;
 import net.jodah.sarge.Supervisor;
-import net.jodah.sarge.util.Duration;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.time.Duration;
 
 /**
  * @author Jonathan Halterman
@@ -17,7 +18,7 @@ import org.testng.annotations.Test;
 @Test
 public class HierarchicalSupervisionTest extends AbstractTest {
   private static int counter;
-  private static final Plan RETRY_PLAN = Plans.retryOn(Throwable.class, 3, Duration.mins(10))
+  private static final Plan RETRY_PLAN = Plans.retryOn(Throwable.class, 3, Duration.ofMinutes(10))
       .make();
   private static final Plan ESCALATE_PLAN = Plans.escalateOn(Throwable.class).make();
 
