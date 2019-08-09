@@ -92,6 +92,22 @@ public class Sarge {
     supervise(supervisable, supervisor);
     return supervisable;
   }
+  
+  /**
+   * Returns an instance of the {@code type} that is supervised by the {@code supervisor}'s
+   * {@link Supervisor#plan() plan}, forming a parent-child supervision relationship between the
+   * {@code supervisor} and the result where failures can be escalated.
+   * 
+   * @throws NullPointerException if {@code type} or {@code supervisor} are null
+   * @throws IllegalArgumentException if the {@code type} cannot be supervised
+   */
+  public <C, S extends Supervisor> C supervised(Class<C> type, Object[] args, S supervisor) {
+    Assert.notNull(type, "type");
+    Assert.notNull(supervisor, "supervisor");
+    C supervisable = ProxyFactory.proxyFor(type, args, this);
+    supervise(supervisable, supervisor);
+    return supervisable;
+  }
 
   /**
    * Returns an instance of the {@code selfSupervisable} that is supervised by the by the
