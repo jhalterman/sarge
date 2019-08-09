@@ -85,23 +85,7 @@ public class Sarge {
    * @throws NullPointerException if {@code type} or {@code supervisor} are null
    * @throws IllegalArgumentException if the {@code type} cannot be supervised
    */
-  public <C, S extends Supervisor> C supervised(Class<C> type, S supervisor) {
-    Assert.notNull(type, "type");
-    Assert.notNull(supervisor, "supervisor");
-    C supervisable = ProxyFactory.proxyFor(type, this);
-    supervise(supervisable, supervisor);
-    return supervisable;
-  }
-  
-  /**
-   * Returns an instance of the {@code type} that is supervised by the {@code supervisor}'s
-   * {@link Supervisor#plan() plan}, forming a parent-child supervision relationship between the
-   * {@code supervisor} and the result where failures can be escalated.
-   * 
-   * @throws NullPointerException if {@code type} or {@code supervisor} are null
-   * @throws IllegalArgumentException if the {@code type} cannot be supervised
-   */
-  public <C, S extends Supervisor> C supervised(Class<C> type, Object[] args, S supervisor) {
+  public <C, S extends Supervisor> C supervised(Class<C> type, S supervisor, Object... args) {
     Assert.notNull(type, "type");
     Assert.notNull(supervisor, "supervisor");
     C supervisable = ProxyFactory.proxyFor(type, args, this);
@@ -116,23 +100,23 @@ public class Sarge {
    * @throws NullPointerException if {@code selfSupervisable} is null
    * @throws IllegalArgumentException if the {@code selfSupervisable} cannot be supervised
    */
-  public <T extends SelfSupervisor> T supervised(Class<T> selfSupervisable) {
+  public <T extends SelfSupervisor> T supervised(Class<T> selfSupervisable, Object... args) {
     Assert.notNull(selfSupervisable, "selfSupervisable");
-    T supervisable = ProxyFactory.proxyFor(selfSupervisable, this);
+    T supervisable = ProxyFactory.proxyFor(selfSupervisable, args, this);
     supervise(supervisable, supervisable.selfPlan());
     return supervisable;
   }
-
+  
   /**
    * Returns an instance of the {@code type} that is supervised by the {@code plan}.
    * 
    * @throws NullPointerException if {@code type} or {@code plan} are null
    * @throws IllegalArgumentException if the {@code type} cannot be supervised
    */
-  public <T> T supervised(Class<T> type, Plan plan) {
+  public <T> T supervised(Class<T> type, Plan plan, Object... args) {
     Assert.notNull(type, "type");
     Assert.notNull(plan, "plan");
-    T supervisable = ProxyFactory.proxyFor(type, this);
+    T supervisable = ProxyFactory.proxyFor(type, args, this);
     supervise(supervisable, plan);
     return supervisable;
   }
@@ -144,10 +128,10 @@ public class Sarge {
    * @throws NullPointerException if {@code type} or {@code planMaker} are null
    * @throws IllegalArgumentException if the {@code type} cannot be supervised
    */
-  public <T> T supervised(Class<T> type, PlanMaker planMaker) {
+  public <T> T supervised(Class<T> type, PlanMaker planMaker, Object... args) {
     Assert.notNull(type, "type");
     Assert.notNull(planMaker, "planMaker");
-    return supervised(type, planMaker.make());
+    return supervised(type, planMaker.make(), args);
   }
 
   /**
