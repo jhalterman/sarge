@@ -1,12 +1,12 @@
 package net.jodah.sarge.functional;
 
+import org.testng.annotations.Test;
+
 import net.jodah.sarge.AbstractTest;
 import net.jodah.sarge.Directive;
 import net.jodah.sarge.Plan;
 import net.jodah.sarge.SelfSupervisor;
 import net.jodah.sarge.Supervisor;
-
-import org.testng.annotations.Test;
 
 /**
  * @author Jonathan Halterman
@@ -48,7 +48,7 @@ public class SupervisorOverride extends AbstractTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldNotAllowSelfSupervisionOverride() {
-    Child child = sarge.supervised(Child.class, new Parent());
+    Child child = sarge.supervised(Child.class, new Parent(), new Object[]{});
     sarge.supervise(child, new Parent());
   }
 }
