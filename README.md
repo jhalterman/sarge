@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/jhalterman/sarge.svg)](https://travis-ci.org/jhalterman/sarge)
 [![Maven Central](https://img.shields.io/maven-central/v/net.jodah/sarge.svg?maxAge=60&colorB=53C92E)][maven] 
 [![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
-[![JavaDoc](https://img.shields.io/maven-central/v/net.jodah/sarge.svg?maxAge=60&label=javadoc&color=blue)](https://jhalterman.github.com/sarge/javadoc)
+[![JavaDoc](https://img.shields.io/maven-central/v/net.jodah/sarge.svg?maxAge=60&label=javadoc&color=blue)](https://jodah.net/sarge/javadoc)
 
 *Simple object supervision (for when stuff goes wrong)*
 
@@ -107,7 +107,7 @@ Logging is provided via the [slf4j](http://www.slf4j.org/) [API](http://www.slf4
 
 ## Docs
 
-JavaDocs are available [here](https://jhalterman.github.com/sarge/javadoc).
+JavaDocs are available [here](https://jodah.net/sarge/javadoc).
 
 ## Limitations
 
