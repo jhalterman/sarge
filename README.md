@@ -1,6 +1,6 @@
 # Sarge
 
-[![Build Status](https://travis-ci.org/jhalterman/sarge.svg)](https://travis-ci.org/jhalterman/sarge)
+[![Build Status](https://github.com/jhalterman/sarge/workflows/build/badge.svg)](https://github.com/jhalterman/sarge/actions)
 [![Maven Central](https://img.shields.io/maven-central/v/net.jodah/sarge.svg?maxAge=60&colorB=53C92E)][maven] 
 [![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![JavaDoc](https://img.shields.io/maven-central/v/net.jodah/sarge.svg?maxAge=60&label=javadoc&color=blue)](https://jodah.net/sarge/javadoc)
